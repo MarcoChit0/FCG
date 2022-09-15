@@ -66,12 +66,11 @@ GLFWwindow *initialize(int argc, char *argv[])
     FramebufferSizeCallback(window, 800, 600);
 
     // Imprimimos no terminal informações sobre a GPU do sistema
-    printf("GPU: %s, %s, OpenGL %s, GLSL %s\n", 
-        glGetString(GL_VENDOR), 
-        glGetString(GL_RENDERER), 
-        glGetString(GL_VERSION), 
-        glGetString(GL_SHADING_LANGUAGE_VERSION)
-    );
+    printf("GPU: %s, %s, OpenGL %s, GLSL %s\n",
+           glGetString(GL_VENDOR),
+           glGetString(GL_RENDERER),
+           glGetString(GL_VERSION),
+           glGetString(GL_SHADING_LANGUAGE_VERSION));
 
     // Carregamos os shaders de vértices e de fragmentos
     LoadShadersFromFiles();
@@ -125,6 +124,7 @@ void frame(GLFWwindow *window)
 
     // Agora computamos a matriz de Projeção.
     glm::mat4 projection;
+    glm::mat4 model = Matrix_Identity();
 
     // Note que, no sistema de coordenadas da câmera, os planos near e far
     // estão no sentido negativo! Veja slides 176-204 do documento Aula_09_Projecoes.pdf.
@@ -158,6 +158,24 @@ void frame(GLFWwindow *window)
     glUniformMatrix4fv(view_uniform, 1, GL_FALSE, glm::value_ptr(view));
     glUniformMatrix4fv(projection_uniform, 1, GL_FALSE, glm::value_ptr(projection));
 
+    // // Desenhamos o modelo da esfera
+    // model = Matrix_Translate(-1.0f, 0.0f, 0.0f) * Matrix_Rotate_Z(0.6f) * Matrix_Rotate_X(0.2f) * Matrix_Rotate_Y(g_AngleY + (float)glfwGetTime() * 0.1f);
+    // glUniformMatrix4fv(model_uniform, 1, GL_FALSE, glm::value_ptr(model));
+    // glUniform1i(object_id_uniform, SPHERE);
+    // DrawVirtualObject("sphere");
+
+    // // Desenhamos o modelo do coelho
+    // model = Matrix_Translate(1.0f, 0.0f, 0.0f) * Matrix_Rotate_X(g_AngleX + (float)glfwGetTime() * 0.1f);
+    // glUniformMatrix4fv(model_uniform, 1, GL_FALSE, glm::value_ptr(model));
+    // glUniform1i(object_id_uniform, BUNNY);
+    // DrawVirtualObject("bunny");
+
+
+    // // Desenhamos o plano do chão
+    // model = Matrix_Translate(0.0f, -1.1f, 0.0f);
+    // glUniformMatrix4fv(model_uniform, 1, GL_FALSE, glm::value_ptr(model));
+    // glUniform1i(object_id_uniform, PLANE);
+    // DrawVirtualObject("plane");
     draw_objects(objects);
 
     // Imprimimos na tela os ângulos de Euler que controlam a rotação do
@@ -186,25 +204,31 @@ void frame(GLFWwindow *window)
     glfwPollEvents();
 }
 
-void create_geometric_object(std::string path){
+void create_geometric_object(std::string path)
+{
     ObjModel object_model(path);
     ComputeNormals(&object_model);
     BuildTrianglesAndAddToVirtualScene(&object_model);
 }
 
-void create_geometric_objects(std::vector<std::string> paths){
-    for(unsigned long i = 0; i < paths.size(); i++){
+void create_geometric_objects(std::vector<std::string> paths)
+{
+    for (unsigned long i = 0; i < paths.size(); i++)
+    {
         create_geometric_object(paths[i]);
     }
 }
 
-void load_texture_images(std::vector<std::string> paths){
-    for(unsigned long i = 0; i < paths.size(); i++){
+void load_texture_images(std::vector<std::string> paths)
+{
+    for (unsigned long i = 0; i < paths.size(); i++)
+    {
         LoadTextureImage(paths[i].c_str());
     }
 }
 
-glm::mat4 create_view_matrix(){
+glm::mat4 create_view_matrix()
+{
     // Computamos a posição da câmera utilizando coordenadas esféricas.  As
     // variáveis g_CameraDistance, g_CameraPhi, e g_CameraTheta são
     // controladas pelo mouse do usuário. Veja as funções CursorPosCallback()

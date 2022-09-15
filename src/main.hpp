@@ -50,7 +50,7 @@
 #include "../text_rendering/text_rendering.cpp"
 
 // OBJECTS:
-#include "../objects/objects.hpp"
+#include "../object/object.hpp"
 
 // CONST:
 const char* window_title = "INF01047 - Trabalho Final";
