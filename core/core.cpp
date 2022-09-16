@@ -687,3 +687,42 @@ void PrintObjModelInfo(ObjModel* model)
     printf("\n");
   }
 }
+
+void create_geometric_object(std::string path)
+{
+    ObjModel object_model(path);
+    ComputeNormals(&object_model);
+    BuildTrianglesAndAddToVirtualScene(&object_model);
+}
+
+void create_geometric_objects(std::vector<std::string> paths)
+{
+    for (unsigned long i = 0; i < paths.size(); i++)
+    {
+        create_geometric_object(paths[i]);
+    }
+}
+
+void load_texture_images(std::vector<std::string> paths)
+{
+    for (unsigned long i = 0; i < paths.size(); i++)
+    {
+        LoadTextureImage(paths[i].c_str());
+    }
+}
+
+glm::mat4 create_view_matrix()
+{
+    // Computamos a posição da câmera utilizando coordenadas esféricas.
+    float r = g_CameraDistance;
+    float y = r * sin(g_CameraPhi);
+    float z = r * cos(g_CameraPhi) * cos(g_CameraTheta);
+    float x = r * cos(g_CameraPhi) * sin(g_CameraTheta);
+
+    glm::vec4 camera_position_c = glm::vec4(x, y, z, 1.0f);             // Ponto "c", centro da câmera
+    glm::vec4 camera_lookat_l = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);      // Ponto "l", para onde a câmera (look-at) estará sempre olhando
+    glm::vec4 camera_view_vector = camera_lookat_l - camera_position_c; // Vetor "view", sentido para onde a câmera está virada
+    glm::vec4 camera_up_vector = glm::vec4(0.0f, 1.0f, 0.0f, 0.0f);     // Vetor "up" fixado para apontar para o "céu" (eito Y global)
+
+    return Matrix_Camera_View(camera_position_c, camera_view_vector, camera_up_vector);
+}

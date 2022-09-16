@@ -17,7 +17,6 @@
 #include "utils.h"
 #include "matrices.h"
 
-
 // Variáveis que definem um programa de GPU (shaders).
 GLuint vertex_shader_id;
 GLuint fragment_shader_id;
@@ -32,46 +31,35 @@ GLint bbox_max_uniform;
 // Número de texturas carregadas pela função LoadTextureImage()
 GLuint g_NumLoadedTextures = 0;
 
-// Abaixo definimos variáveis globais utilizadas em várias funções do código.
-
 // A cena virtual é uma lista de objetos nomeados, guardados em um dicionário
 std::map<std::string, SceneObject> g_VirtualScene;
 
 // Pilha que guardará as matrizes de modelagem.
 std::stack<glm::mat4>  g_MatrixStack;
 
+std::vector<std::string> texture_images= {
+    "../../data/tc-earth_daymap_surface.jpg",
+    "../../data/tc-earth_nightmap_citylights.gif"
+};
+
 // Declaração de funções utilizadas para pilha de matrizes de modelagem.
 void PushMatrix(glm::mat4 M);
 void PopMatrix(glm::mat4& M);
-
 // Constrói representação de um ObjModel como malha de triângulos para renderização
 void BuildTrianglesAndAddToVirtualScene(ObjModel*);
-
-// Computa normais de um ObjModel, caso não existam.
 void ComputeNormals(ObjModel* model); 
-
-// Carrega os shaders de vértice e fragmento, criando um programa de GPU
 void LoadShadersFromFiles(); 
-
-// Função que carrega imagens de textura
 void LoadTextureImage(const char* filename);
-
-// Desenha um objeto armazenado em g_VirtualScene
 void DrawVirtualObject(const char* object_name);
-
-// Carrega um vertex shader
 GLuint LoadShader_Vertex(const char* filename);  
-
-// Carrega um fragment shader
 GLuint LoadShader_Fragment(const char* filename);
-
-// Função utilizada pelas duas acima
 void LoadShader(const char* filename, GLuint shader_id);
-
-// Cria um programa de GPU
 GLuint CreateGpuProgram(GLuint vertex_shader_id, GLuint fragment_shader_id);
-
-// Função para debugging
 void PrintObjModelInfo(ObjModel*); 
+void create_geometric_object(std::string path);
+void create_geometric_objects(std::vector<std::string> paths);
+void load_texture_images(std::vector<std::string> paths);
+glm::mat4 create_view_matrix();
+glm::mat4 create_projection_matrix();
 
 #endif

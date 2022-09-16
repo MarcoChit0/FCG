@@ -5,6 +5,12 @@
 #include <vector>
 #include <iostream>
 
+std::vector<std::string> obj_models= {
+    "../../data/sphere.obj",
+    "../../data/bunny.obj",
+    "../../data/plane.obj"
+};
+
 struct ObjModel
 {
     tinyobj::attrib_t                 attrib;
@@ -28,5 +34,6 @@ struct ObjModel
         printf("OK.\n");
     }
 };
+
 
 #endif

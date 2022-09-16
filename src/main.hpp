@@ -55,22 +55,9 @@
 // CONST:
 const char* window_title = "INF01047 - Trabalho Final";
 
-std::vector<std::string> texture_images= {
-    "../../data/tc-earth_daymap_surface.jpg",
-    "../../data/tc-earth_nightmap_citylights.gif"
-};
-
-std::vector<std::string> obj_models= {
-    "../../data/sphere.obj",
-    "../../data/bunny.obj",
-    "../../data/plane.obj"
-};
-
+#define NEARPLANE  -0.1f
+#define FARPLANE  -10.0f
 
 GLFWwindow *initialize(int argc, char *argv[]);
 void frame(GLFWwindow *window);
-void create_geometric_object(std::string path);
-void create_geometric_objects(std::vector<std::string> paths);
-void load_texture_images(std::vector<std::string> paths);
-glm::mat4 create_view_matrix();
 #endif

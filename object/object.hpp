@@ -66,7 +66,7 @@ Object* Plane = new Object(PLANE, "plane", Matrix_Translate(0.0f, -1.1f, 0.0f));
 vector <Object*> objects = {Sphere, Bunny, Plane};
 
 void draw_objects(vector <Object*> objs){
-    for(int i = 0; i < objs.size(); i++){
+    for(unsigned long i = 0; i < objs.size(); i++){
         objs[i]->draw();
     }
 }
