@@ -1,8 +1,8 @@
 #ifndef CORE_HPP
 #define CORE_HPP
 
-#include "../struct/ObjModel.hpp"
-#include "../struct/SceneObject.hpp"
+#include "../object/ObjectModel.hpp"
+#include "../object/SceneObject.hpp"
 #include <map>
 #include <stack>
 #include <string>
@@ -37,6 +37,7 @@ std::map<std::string, SceneObject> g_VirtualScene;
 // Pilha que guardará as matrizes de modelagem.
 std::stack<glm::mat4>  g_MatrixStack;
 
+// Vetor que armazena os caminhos das imagens de textura.
 std::vector<std::string> texture_images= {
     "../../data/tc-earth_daymap_surface.jpg",
     "../../data/tc-earth_nightmap_citylights.gif"
@@ -45,9 +46,9 @@ std::vector<std::string> texture_images= {
 // Declaração de funções utilizadas para pilha de matrizes de modelagem.
 void PushMatrix(glm::mat4 M);
 void PopMatrix(glm::mat4& M);
-// Constrói representação de um ObjModel como malha de triângulos para renderização
-void BuildTrianglesAndAddToVirtualScene(ObjModel*);
-void ComputeNormals(ObjModel* model); 
+// Constrói representação de um ObjectModel como malha de triângulos para renderização
+void BuildTrianglesAndAddToVirtualScene(ObjectModel*);
+void ComputeNormals(ObjectModel* model); 
 void LoadShadersFromFiles(); 
 void LoadTextureImage(const char* filename);
 void DrawVirtualObject(const char* object_name);
@@ -55,7 +56,7 @@ GLuint LoadShader_Vertex(const char* filename);
 GLuint LoadShader_Fragment(const char* filename);
 void LoadShader(const char* filename, GLuint shader_id);
 GLuint CreateGpuProgram(GLuint vertex_shader_id, GLuint fragment_shader_id);
-void PrintObjModelInfo(ObjModel*); 
+void PrintObjModelInfo(ObjectModel*); 
 void create_geometric_object(std::string path);
 void create_geometric_objects(std::vector<std::string> paths);
 void load_texture_images(std::vector<std::string> paths);

@@ -80,7 +80,7 @@ GLFWwindow *initialize(int argc, char *argv[])
 
     if (argc > 1)
     {
-        ObjModel model(argv[1]);
+        ObjectModel model(argv[1]);
         BuildTrianglesAndAddToVirtualScene(&model);
     }
 

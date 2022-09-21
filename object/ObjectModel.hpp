@@ -11,13 +11,14 @@ std::vector<std::string> obj_models= {
     "../../data/plane.obj"
 };
 
-struct ObjModel
+// Estrutura responsável por ler o arquivo '.obj' e carregar o modelo armazenado no arquivo.
+struct ObjectModel
 {
     tinyobj::attrib_t                 attrib;
     std::vector<tinyobj::shape_t>     shapes;
     std::vector<tinyobj::material_t>  materials;
 
-    ObjModel(std::string filename, const char* basepath = NULL, bool triangulate = true)
+    ObjectModel(std::string filename, const char* basepath = NULL, bool triangulate = true)
     {
         std::cout << "Carregando modelo: " << filename << std::endl;
         const char* c_filename = filename.c_str();

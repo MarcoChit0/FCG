@@ -1,8 +1,8 @@
 #include "core.hpp"
 
 
-// Constrói triângulos para futura renderização a partir de um ObjModel.
-void BuildTrianglesAndAddToVirtualScene(ObjModel* model)
+// Constrói triângulos para futura renderização a partir de um ObjectModel.
+void BuildTrianglesAndAddToVirtualScene(ObjectModel* model)
 {
     GLuint vertex_array_object_id;
     glGenVertexArrays(1, &vertex_array_object_id);
@@ -37,11 +37,11 @@ void BuildTrianglesAndAddToVirtualScene(ObjModel* model)
                 const float vx = model->attrib.vertices[3*idx.vertex_index + 0];
                 const float vy = model->attrib.vertices[3*idx.vertex_index + 1];
                 const float vz = model->attrib.vertices[3*idx.vertex_index + 2];
-                //printf("tri %d vert %d = (%.2f, %.2f, %.2f)\n", (int)triangle, (int)vertex, vx, vy, vz);
-                model_coefficients.push_back( vx ); // X
-                model_coefficients.push_back( vy ); // Y
-                model_coefficients.push_back( vz ); // Z
-                model_coefficients.push_back( 1.0f ); // W
+                
+                model_coefficients.push_back( vx );     // X
+                model_coefficients.push_back( vy );     // Y
+                model_coefficients.push_back( vz );     // Z
+                model_coefficients.push_back( 1.0f );   // W
 
                 bbox_min.x = std::min(bbox_min.x, vx);
                 bbox_min.y = std::min(bbox_min.y, vy);
@@ -49,11 +49,6 @@ void BuildTrianglesAndAddToVirtualScene(ObjModel* model)
                 bbox_max.x = std::max(bbox_max.x, vx);
                 bbox_max.y = std::max(bbox_max.y, vy);
                 bbox_max.z = std::max(bbox_max.z, vz);
-
-                // Inspecionando o código da tinyobjloader, o aluno Bernardo
-                // Sulzbach (2017/1) apontou que a maneira correta de testar se
-                // existem normais e coordenadas de textura no ObjModel é
-                // comparando se o índice retornado é -1. Fazemos isso abaixo.
 
                 if ( idx.normal_index != -1 )
                 {
@@ -138,10 +133,9 @@ void BuildTrianglesAndAddToVirtualScene(ObjModel* model)
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), NULL, GL_STATIC_DRAW);
     glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, indices.size() * sizeof(GLuint), indices.data());
     // glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); // XXX Errado!
-    //
 
-    // "Desligamos" o VAO, evitando assim que operações posteriores venham a
-    // alterar o mesmo. Isso evita bugs.
+    // "Desligamos" o VAO, evitando assim que operações posteriores venham a alterar o mesmo. 
+    // Isso evita bugs.
     glBindVertexArray(0);
 }
 
@@ -251,9 +245,9 @@ void LoadShadersFromFiles()
 }
 
 
-// Função que computa as normais de um ObjModel, caso elas não tenham sido
+// Função que computa as normais de um ObjectModel, caso elas não tenham sido
 // especificadas dentro do arquivo ".obj"
-void ComputeNormals(ObjModel* model)
+void ComputeNormals(ObjectModel* model)
 {
     if ( !model->attrib.normals.empty() )
         return;
@@ -522,7 +516,7 @@ void LoadTextureImage(const char* filename)
 // Função para debugging: imprime no terminal todas informações de um modelo
 // geométrico carregado de um arquivo ".obj".
 // Veja: https://github.com/syoyo/tinyobjloader/blob/22883def8db9ef1f3ffb9b404318e7dd25fdbb51/loader_example.cc#L98
-void PrintObjModelInfo(ObjModel* model)
+void PrintObjModelInfo(ObjectModel* model)
 {
   const tinyobj::attrib_t                & attrib    = model->attrib;
   const std::vector<tinyobj::shape_t>    & shapes    = model->shapes;
@@ -690,7 +684,7 @@ void PrintObjModelInfo(ObjModel* model)
 
 void create_geometric_object(std::string path)
 {
-    ObjModel object_model(path);
+    ObjectModel object_model(path);
     ComputeNormals(&object_model);
     BuildTrianglesAndAddToVirtualScene(&object_model);
 }

@@ -5,6 +5,7 @@
 #include <glad/glad.h>
 #include <glm/mat4x4.hpp>
 
+// Estrutura responsável por salvar os dados do objeto renderizado.
 struct SceneObject
 {
     std::string  name;        // Nome do objeto

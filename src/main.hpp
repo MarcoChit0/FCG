@@ -33,10 +33,6 @@
 #include "utils.h"
 #include "matrices.h"
 
-// STRUCTS:
-#include "../struct/SceneObject.hpp"
-#include "../struct/ObjModel.hpp"
-
 // USER INPUT:
 #include "../user_input/user_input.hpp"
 #include "../user_input/user_input.cpp"
@@ -50,7 +46,9 @@
 #include "../text_rendering/text_rendering.cpp"
 
 // OBJECTS:
-#include "../object/object.hpp"
+#include "../object/ObjectModelMatrix.hpp"
+#include "../object/SceneObject.hpp"
+#include "../object/ObjectModel.hpp"
 
 // CONST:
 const char* window_title = "INF01047 - Trabalho Final";
