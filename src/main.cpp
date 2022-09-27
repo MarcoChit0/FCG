@@ -76,7 +76,7 @@ GLFWwindow *initialize(int argc, char *argv[])
     load_texture_images(texture_images);
 
     // Construímos a representação de objetos geométricos através de malhas de triângulos
-    create_geometric_objects(obj_models);
+    create_geometric_objects(objects);
 
     if (argc > 1)
     {
@@ -101,7 +101,6 @@ GLFWwindow *initialize(int argc, char *argv[])
 // Realiza as operações de rendeziração
 void frame(GLFWwindow *window)
 {
-
     // Definimos a cor do "fundo" do framebuffer como branco. 
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
@@ -129,23 +128,4 @@ void frame(GLFWwindow *window)
 
     // Verificamos com o sistema operacional se houve alguma interação com o usuário
     glfwPollEvents();
-}
-
-
-glm::mat4 create_projection_matrix(){
-    if (g_UsePerspectiveProjection)
-    {
-        // Projeção Perspectiva.
-        float field_of_view = 3.141592 / 3.0f;
-        return Matrix_Perspective(field_of_view, g_ScreenRatio, NEARPLANE, FARPLANE);
-    }
-    else
-    {
-        // Projeção Ortográfica.
-        float t = 1.5f * g_CameraDistance / 2.5f;
-        float b = -t;
-        float r = t * g_ScreenRatio;
-        float l = -r;
-        return Matrix_Orthographic(l, r, b, t, NEARPLANE, FARPLANE);
-    }
 }

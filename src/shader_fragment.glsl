@@ -22,6 +22,9 @@ uniform mat4 projection;
 #define SPHERE 0
 #define BUNNY  1
 #define PLANE  2
+#define CYBERTRUCKDELOREAN 3
+#define COW 4
+#define SMALLSPACEFIGHTER 5
 uniform int object_id;
 
 // Parâmetros da axis-aligned bounding box (AABB) do modelo
@@ -116,6 +119,48 @@ void main()
         // Coordenadas de textura do plano, obtidas do arquivo OBJ.
         U = texcoords.x;
         V = texcoords.y;
+    }
+    else if (object_id == CYBERTRUCKDELOREAN)
+    {
+        float minx = bbox_min.x;
+        float maxx = bbox_max.x;
+
+        float miny = bbox_min.y;
+        float maxy = bbox_max.y;
+
+        float minz = bbox_min.z;
+        float maxz = bbox_max.z;
+
+        U = 0.0;
+        V = 0.0; 
+    }
+    else if (object_id == COW)
+    {
+        float minx = bbox_min.x;
+        float maxx = bbox_max.x;
+
+        float miny = bbox_min.y;
+        float maxy = bbox_max.y;
+
+        float minz = bbox_min.z;
+        float maxz = bbox_max.z;
+        
+        U = 0.0;
+        V = 0.0;
+    }
+    else if (object_id == SMALLSPACEFIGHTER)
+    {
+        float minx = bbox_min.x;
+        float maxx = bbox_max.x;
+
+        float miny = bbox_min.y;
+        float maxy = bbox_max.y;
+
+        float minz = bbox_min.z;
+        float maxz = bbox_max.z;
+        
+        U = 0.0;
+        V = 0.0;
     }
 
     // Obtemos a refletância difusa a partir da leitura da imagem TextureImage0

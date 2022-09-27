@@ -14,8 +14,14 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <tiny_obj_loader.h>
 #include <stb_image.h>
+#include <fstream>
+#include <sstream>
 #include "utils.h"
 #include "matrices.h"
+#include "../user_input/user_input.hpp"
+
+#define NEARPLANE  -0.1f
+#define FARPLANE  -10.0f
 
 // Variáveis que definem um programa de GPU (shaders).
 GLuint vertex_shader_id;
@@ -57,8 +63,8 @@ GLuint LoadShader_Fragment(const char* filename);
 void LoadShader(const char* filename, GLuint shader_id);
 GLuint CreateGpuProgram(GLuint vertex_shader_id, GLuint fragment_shader_id);
 void PrintObjModelInfo(ObjectModel*); 
-void create_geometric_object(std::string path);
-void create_geometric_objects(std::vector<std::string> paths);
+// void create_geometric_object(std::string path);
+// void create_geometric_objects(std::vector<std::string> paths);
 void load_texture_images(std::vector<std::string> paths);
 glm::mat4 create_view_matrix();
 glm::mat4 create_projection_matrix();

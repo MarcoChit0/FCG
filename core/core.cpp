@@ -682,21 +682,6 @@ void PrintObjModelInfo(ObjectModel* model)
   }
 }
 
-void create_geometric_object(std::string path)
-{
-    ObjectModel object_model(path);
-    ComputeNormals(&object_model);
-    BuildTrianglesAndAddToVirtualScene(&object_model);
-}
-
-void create_geometric_objects(std::vector<std::string> paths)
-{
-    for (unsigned long i = 0; i < paths.size(); i++)
-    {
-        create_geometric_object(paths[i]);
-    }
-}
-
 void load_texture_images(std::vector<std::string> paths)
 {
     for (unsigned long i = 0; i < paths.size(); i++)
@@ -719,4 +704,22 @@ glm::mat4 create_view_matrix()
     glm::vec4 camera_up_vector = glm::vec4(0.0f, 1.0f, 0.0f, 0.0f);     // Vetor "up" fixado para apontar para o "céu" (eito Y global)
 
     return Matrix_Camera_View(camera_position_c, camera_view_vector, camera_up_vector);
+}
+
+glm::mat4 create_projection_matrix(){
+    if (g_UsePerspectiveProjection)
+    {
+        // Projeção Perspectiva.
+        float field_of_view = 3.141592 / 3.0f;
+        return Matrix_Perspective(field_of_view, g_ScreenRatio, NEARPLANE, FARPLANE);
+    }
+    else
+    {
+        // Projeção Ortográfica.
+        float t = 1.5f * g_CameraDistance / 2.5f;
+        float b = -t;
+        float r = t * g_ScreenRatio;
+        float l = -r;
+        return Matrix_Orthographic(l, r, b, t, NEARPLANE, FARPLANE);
+    }
 }

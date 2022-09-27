@@ -47,15 +47,12 @@
 
 // OBJECTS:
 #include "../object/ObjectModelMatrix.hpp"
+#include "../object/ObjectModelMatrix.cpp"
 #include "../object/SceneObject.hpp"
 #include "../object/ObjectModel.hpp"
 
 // CONST:
 const char* window_title = "INF01047 - Trabalho Final";
-
-#define NEARPLANE  -0.1f
-#define FARPLANE  -10.0f
-
 GLFWwindow *initialize(int argc, char *argv[]);
 void frame(GLFWwindow *window);
 #endif

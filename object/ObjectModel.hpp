@@ -5,12 +5,6 @@
 #include <vector>
 #include <iostream>
 
-std::vector<std::string> obj_models= {
-    "../../data/sphere.obj",
-    "../../data/bunny.obj",
-    "../../data/plane.obj"
-};
-
 // Estrutura responsável por ler o arquivo '.obj' e carregar o modelo armazenado no arquivo.
 struct ObjectModel
 {
