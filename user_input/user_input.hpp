@@ -9,6 +9,7 @@
 
 #include <cstdio>
 #include "../core/core.hpp"
+#include "../object/Objects.hpp"
 
 // Razão de proporção da janela (largura/altura). Veja função FramebufferSizeCallback().
 float g_ScreenRatio = 1.0f;
@@ -27,14 +28,6 @@ bool g_MiddleMouseButtonPressed = false;
 float g_CameraTheta = 0.0f;     // Ângulo no plano ZX em relação ao eixo Z
 float g_CameraPhi = 0.0f;       // Ângulo em relação ao eixo Y
 float g_CameraDistance = 3.5f;  // Distância da câmera para a origem
-
-// Variáveis que controlam rotação do antebraço
-float g_ForearmAngleZ = 0.0f;
-float g_ForearmAngleX = 0.0f;
-
-// Variáveis que controlam translação do torso
-float g_TorsoPositionX = 0.0f;
-float g_TorsoPositionY = 0.0f;
 
 // Variável que controla o tipo de projeção utilizada: perspectiva ou ortográfica.
 bool g_UsePerspectiveProjection = true;

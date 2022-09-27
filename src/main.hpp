@@ -50,6 +50,8 @@
 #include "../object/ObjectModelMatrix.cpp"
 #include "../object/SceneObject.hpp"
 #include "../object/ObjectModel.hpp"
+#include "../object/Objects.hpp"
+#include "../object/Objects.cpp"
 
 // CONST:
 const char* window_title = "INF01047 - Trabalho Final";

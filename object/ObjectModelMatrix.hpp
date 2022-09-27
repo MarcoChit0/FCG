@@ -15,13 +15,6 @@
 #include "../user_input/user_input.hpp"
 #include <glm/gtx/string_cast.hpp>
 
-#define SPHERE 0
-#define BUNNY 1
-#define PLANE 2
-#define CYBERTRUCKDELOREAN 3
-#define COW 4
-#define SMALLSAPCEFIGHTER 5
-
 using namespace std;
 
 vector <string> tokenize(string line, char delim=' ');
@@ -70,6 +63,9 @@ public:
             }
         }
     }
+    void update_model(glm::mat4 op){
+        this->model = this->model * op;
+    }
 
     virtual void draw(){
         this->apply_transform();
@@ -80,6 +76,8 @@ public:
     }
 };
 
+
+// Estrutura responsável por controlar a posição dos objetos complexos, i.e., objs cujos arquivos que os definem são compostos de "mini-objetos"
 class ComplexObjectModelMatrix : public ObjectModelMatrix
 {
     private: 
@@ -128,7 +126,7 @@ class ComplexObjectModelMatrix : public ObjectModelMatrix
                 exit(1);
             }
         }
-        void draw(){
+        virtual void draw(){
             this->apply_transform();
             for(unsigned long i=0; i < this->objs_names.size();i++){
                 glm::mat4 model = this->get_model();
@@ -139,27 +137,4 @@ class ComplexObjectModelMatrix : public ObjectModelMatrix
         }
 
 };
-
-// // TODO: implememtar meĉanica player
-// class Player : ObjectModelMatrix 
-// {
-//     public:
-//         Player(int id, string name, glm::mat4 model, vector<glm::mat4> transform) : ObjectModelMatrix(id, name, model, transform) {}
-//         Player(int id, string name, glm::mat4 model) : ObjectModelMatrix(id, name, model) {}
-//         void move();
-//         void shot();
-// };
-
-ObjectModelMatrix* Sphere = new ObjectModelMatrix(SPHERE, "sphere", Matrix_Translate(-1.0f, 0.0f, 0.0f) * Matrix_Rotate_Z(0.6f) * Matrix_Rotate_X(0.2f),"../../data/sphere.obj", {Matrix_Rotate_Y(0.026)});
-ObjectModelMatrix* Bunny = new ObjectModelMatrix(BUNNY, "bunny", Matrix_Translate(1.0f, 0.0f, 0.0f),"../../data/bunny.obj", {Matrix_Rotate_X(0.026)});
-ObjectModelMatrix* Plane = new ObjectModelMatrix(PLANE, "plane", Matrix_Translate(0.0f, -1.1f, 0.0f), "../../data/plane.obj");
-ComplexObjectModelMatrix* CyberpunkDeLorean = new ComplexObjectModelMatrix(CYBERTRUCKDELOREAN, "CyberpunkDeLorean", Matrix_Translate(-1.0f, 1.0f, -1.0f)*Matrix_Scale(0.5f, 0.5f, 0.5f), "../../data/CyberpunkDeLorean.obj", USEMTL_TYPE);
-ObjectModelMatrix* Cow = new ObjectModelMatrix(COW, "cow", Matrix_Translate(-1.0f, -1.0f, -1.0f), "../../data/cow.obj");
-ComplexObjectModelMatrix* SmallSpaceFighter = new ComplexObjectModelMatrix(SMALLSAPCEFIGHTER, "SmallSpaceFighter", Matrix_Translate(1.0f, 1.0f, 1.0f)*Matrix_Scale(0.1f, 0.1f, 0.1f), "../../data/SmallSpaceFighter.obj", O_TYPE);
-
-vector <ObjectModelMatrix*> objects = {Sphere, Bunny, Plane, CyberpunkDeLorean, Cow, SmallSpaceFighter};
-
-void draw_objects(vector <ObjectModelMatrix*> objs);
-void create_geometric_object(ObjectModelMatrix* obj);
-void create_geometric_objects(vector<ObjectModelMatrix*> objs);
 #endif
