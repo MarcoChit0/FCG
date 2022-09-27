@@ -198,6 +198,9 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mod)
     if (key == GLFW_KEY_D && action == GLFW_PRESS){
         player->move_right();
     }
+    if (key == GLFW_KEY_ENTER && action == GLFW_PRESS){
+        player_shoot();
+    }
     // Se o usuário apertar a tecla espaço, resetamos os ângulos de Euler para zero.
     if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)
     {

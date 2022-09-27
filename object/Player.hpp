@@ -1,8 +1,8 @@
 #ifndef PLAYER_HPP
 #define PLAYER_HPP
 
+#include "Objects.hpp"
 #include "ObjectModelMatrix.hpp"
-
 #define SPEED 1.0f
 
 class Player : public ComplexObjectModelMatrix
@@ -11,16 +11,19 @@ class Player : public ComplexObjectModelMatrix
         int life_points;
         float speed;
         vector<glm::mat4> movement;
+        double shots;
     public:
         Player(int id, string name, glm::mat4 model, string path, vector<glm::mat4> transform, vector <string> objs_names):
         ComplexObjectModelMatrix(id, name, model, path, transform, objs_names) 
         {
+            this->shots = 0;
             this->speed = SPEED;
             this->movement = {};
         }
         Player(int id, string name, glm::mat4 model, string path) : 
         ComplexObjectModelMatrix(id, name, model, path)
         {
+            this->shots = 0;
             this->speed = SPEED;
             this->movement = {};
         } 
@@ -31,8 +34,6 @@ class Player : public ComplexObjectModelMatrix
         void move_left(){
             this->movement.push_back(Matrix_Translate(-this->speed, 0.0f, 0.0f));
         }
-        void shoot();
-
         void draw(){
             if (this->movement.size() > 0){
                 glm::mat4 movement = this->movement[this->movement.size()-1];

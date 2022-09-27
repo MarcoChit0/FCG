@@ -36,6 +36,12 @@ public:
     glm::mat4 get_model() { return this->model; }
     string get_path() { return this->path; }
 
+    // SETS:
+    void set_transform(vector<glm::mat4> transform){ this->transform = transform; }
+
+    // UPDATES:
+    void update_model(glm::mat4 op) { this->model = this->model * op; }
+
     ObjectModelMatrix(int id, string name, glm::mat4 model, string path, vector<glm::mat4> transform){
         this->id = id;
         this->name = name;

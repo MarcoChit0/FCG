@@ -76,7 +76,7 @@ GLFWwindow *initialize(int argc, char *argv[])
     load_texture_images(texture_images);
 
     // Construímos a representação de objetos geométricos através de malhas de triângulos
-    create_geometric_objects(objects);
+    create_geometric_objects();
 
     if (argc > 1)
     {

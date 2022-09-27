@@ -6,17 +6,21 @@ void draw_objects(vector <ObjectModelMatrix*> objs){
     }
 }
 
-void create_geometric_object(ObjectModelMatrix* obj)
+void create_geometric_objects()
 {
-    ObjectModel object_model(obj->get_path());
-    ComputeNormals(&object_model);
-    BuildTrianglesAndAddToVirtualScene(&object_model);
+    for (unsigned long i = 0; i < objects.size(); i++)
+    {   
+        ObjectModel object_model(objects[i]->get_path());
+        ComputeNormals(&object_model);
+        BuildTrianglesAndAddToVirtualScene(&object_model);
+    }
 }
 
-void create_geometric_objects(vector<ObjectModelMatrix*> objs)
-{
-    for (unsigned long i = 0; i < objs.size(); i++)
-    {
-        create_geometric_object(objs[i]);
-    }
+// TODO: debug
+void player_shoot(){
+    Missile* missile = new Missile(MISSILE_ID, "missile", player->get_model());
+    missile->adjust_position();
+    missile->go_foward();
+    objects.push_back(missile);
+    number_of_missiles += 1;
 }
