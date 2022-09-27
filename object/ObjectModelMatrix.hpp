@@ -19,15 +19,6 @@ using namespace std;
 
 vector <string> tokenize(string line, char delim=' ');
 
-enum ObjectTypes
-{
-    O_TYPE, 
-    G_TYPE,
-    USEMTL_TYPE,
-};
-
-string ObjectTypeToString(ObjectTypes type);
-
 // Estrutura responsável por controlar a posição dos objetos.
 class ObjectModelMatrix
 {
@@ -83,26 +74,22 @@ class ComplexObjectModelMatrix : public ObjectModelMatrix
     private: 
         vector <string> objs_names;
         string path_to_obj_file;
-        ObjectTypes type;
     public:
-        ComplexObjectModelMatrix(int id, string name, glm::mat4 model, string path, ObjectTypes type, vector<glm::mat4> transform, vector <string> objs_names) :  
+        ComplexObjectModelMatrix(int id, string name, glm::mat4 model, string path, vector<glm::mat4> transform, vector <string> objs_names) :  
         ObjectModelMatrix(id, name, model, path, transform) 
         {
-            this->type = type;
             this->path_to_obj_file = path;
             this->objs_names = objs_names;
         }
-        ComplexObjectModelMatrix(int id, string name, glm::mat4 model, string path, ObjectTypes type, vector<glm::mat4> transform): 
+        ComplexObjectModelMatrix(int id, string name, glm::mat4 model, string path, vector<glm::mat4> transform): 
         ObjectModelMatrix(id, name, model, path, transform)
         {
-            this->type = type;
             this->path_to_obj_file = path;
             this->recover_objs_names();
         } 
-        ComplexObjectModelMatrix(int id, string name, glm::mat4 model, string path, ObjectTypes type): 
+        ComplexObjectModelMatrix(int id, string name, glm::mat4 model, string path): 
         ObjectModelMatrix(id, name, model, path)
         {
-            this->type = type;
             this->path_to_obj_file = path;
             this->recover_objs_names();
         }
@@ -116,7 +103,8 @@ class ComplexObjectModelMatrix : public ObjectModelMatrix
                 while(getline(file, line)){
                     tokens = tokenize(line);
                     // topologia dos objetos no arquivo .obj em uma linha começa com o, g ou usemtl
-                    if (tokens[0] == ObjectTypeToString(this->type)){
+                    if (tokens[0] == "o" || tokens[0] == "g" || tokens[0] == "usemtl" || tokens[0] == "mtllib"){
+                        cout << this->get_name() << endl;
                         this->objs_names.push_back(tokens[1]);
                     }
                 }

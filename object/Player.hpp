@@ -12,14 +12,14 @@ class Player : public ComplexObjectModelMatrix
         float speed;
         vector<glm::mat4> movement;
     public:
-        Player(int id, string name, glm::mat4 model, string path, ObjectTypes type, vector<glm::mat4> transform, vector <string> objs_names):
-        ComplexObjectModelMatrix(id, name, model, path, type, transform, objs_names) 
+        Player(int id, string name, glm::mat4 model, string path, vector<glm::mat4> transform, vector <string> objs_names):
+        ComplexObjectModelMatrix(id, name, model, path, transform, objs_names) 
         {
             this->speed = SPEED;
             this->movement = {};
         }
-        Player(int id, string name, glm::mat4 model, string path, ObjectTypes type) : 
-        ComplexObjectModelMatrix(id, name, model, path, type) 
+        Player(int id, string name, glm::mat4 model, string path) : 
+        ComplexObjectModelMatrix(id, name, model, path)
         {
             this->speed = SPEED;
             this->movement = {};

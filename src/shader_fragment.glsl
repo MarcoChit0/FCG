@@ -20,6 +20,7 @@ uniform mat4 projection;
 
 // Identificador que define qual objeto está sendo desenhado no momento
 #define PLAYER_ID 0
+#define MISSILE_ID 1
 uniform int object_id;
 
 // Parâmetros da axis-aligned bounding box (AABB) do modelo
@@ -80,7 +81,20 @@ void main()
         U = 0.0;
         V = 0.0;
     }
+    else if (object_id == MISSILE_ID)
+    {
+        float minx = bbox_min.x;
+        float maxx = bbox_max.x;
 
+        float miny = bbox_min.y;
+        float maxy = bbox_max.y;
+
+        float minz = bbox_min.z;
+        float maxz = bbox_max.z;
+        
+        U = 0.0;
+        V = 0.0;
+    }
     // Obtemos a refletância difusa a partir da leitura da imagem TextureImage0
     vec3 Kd0 = texture(TextureImage0, vec2(U,V)).rgb;
 

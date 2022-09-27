@@ -2,20 +2,18 @@
 #define OBJECTS_HPP
 
 #include "Player.hpp"
+#include "Missile.hpp"
 #include "ObjectModelMatrix.hpp"
 
 enum ObjectsIds{
     PLAYER_ID,
+    MISSILE_ID,
 };
 
-// Examples: 
-// ObjectModelMatrix* Sphere = new ObjectModelMatrix(SPHERE, "sphere", Matrix_Translate(-1.0f, 0.0f, 0.0f) * Matrix_Rotate_Z(0.6f) * Matrix_Rotate_X(0.2f),"../../data/sphere.obj", {Matrix_Rotate_Y(0.026)});
-// ObjectModelMatrix* Bunny = new ObjectModelMatrix(BUNNY, "bunny", Matrix_Translate(1.0f, 0.0f, 0.0f),"../../data/bunny.obj", {Matrix_Rotate_X(0.026)});
-// ObjectModelMatrix* Plane = new ObjectModelMatrix(PLANE, "plane", Matrix_Translate(0.0f, -1.1f, 0.0f), "../../data/plane.obj");
-// ObjectModelMatrix* Cow = new ObjectModelMatrix(COW, "cow", Matrix_Translate(-1.0f, -1.0f, -1.0f), "../../data/cow.obj");
-Player* player = new Player(PLAYER_ID, "Player", Matrix_Scale(0.1f, 0.1f, 0.1f), "../../data/SmallSpaceFighter.obj", O_TYPE);
-
-vector <ObjectModelMatrix*> objects =  {player};
+Player* player = new Player(PLAYER_ID, "player", Matrix_Scale(0.1f, 0.1f, 0.1f), "../../data/SmallSpaceFighter.obj");
+// Missile* missile = new Missile(MISSILE_ID, "missile", Matrix_Translate(0.0f, 0.0f, -0.5f)*Matrix_Scale(0.05f, 0.05f, 0.05f)*Matrix_Rotate_Y(-3.1415/2.0)*Matrix_Rotate_Z(3.1415/2.0f));
+Missile* missile = new Missile(MISSILE_ID, "missile");
+vector <ObjectModelMatrix*> objects = {player, missile};
 
 void draw_objects(vector <ObjectModelMatrix*> objs);
 void create_geometric_object(ObjectModelMatrix* obj);
