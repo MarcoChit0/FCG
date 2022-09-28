@@ -60,9 +60,6 @@ public:
             }
         }
     }
-    void update_model(glm::mat4 op){
-        this->model = this->model * op;
-    }
 
     virtual void draw(){
         this->apply_transform();
@@ -110,7 +107,6 @@ class ComplexObjectModelMatrix : public ObjectModelMatrix
                     tokens = tokenize(line);
                     // topologia dos objetos no arquivo .obj em uma linha começa com o, g ou usemtl
                     if (tokens[0] == "o" || tokens[0] == "g" || tokens[0] == "usemtl" || tokens[0] == "mtllib"){
-                        cout << this->get_name() << endl;
                         this->objs_names.push_back(tokens[1]);
                     }
                 }

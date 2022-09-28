@@ -1,5 +1,7 @@
 #include "Objects.hpp"
 
+using namespace std; 
+
 void draw_objects(vector <ObjectModelMatrix*> objs){
     for(unsigned long i = 0; i < objs.size(); i++){
         objs[i]->draw();
@@ -16,11 +18,10 @@ void create_geometric_objects()
     }
 }
 
-// TODO: debug
 void player_shoot(){
-    Missile* missile = new Missile(MISSILE_ID, "missile", player->get_model());
-    missile->adjust_position();
-    missile->go_foward();
-    objects.push_back(missile);
+
     number_of_missiles += 1;
+    Missile* m = new Missile(MISSILE_ID, "missile", player->get_model()*ADJUST_MISSILE_POSITION);
+    m->go_foward();
+    objects.push_back(m);
 }
