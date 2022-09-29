@@ -4,6 +4,7 @@
 #include "Objects.hpp"
 #include "ObjectModelMatrix.hpp"
 #define SPEED 1.0f
+#define PLAYER_OBJ_PATH "../../data/player/SmallSpaceFighter.obj"
 
 class Player : public ComplexObjectModelMatrix
 {
@@ -27,6 +28,9 @@ class Player : public ComplexObjectModelMatrix
             this->speed = SPEED;
             this->movement = {};
         } 
+        Player(int id, string name, glm::mat4 model) : Player(id, name, model, PLAYER_OBJ_PATH)
+        {}
+
         void take_damage();
         void move_right(){
             this->movement.push_back(Matrix_Translate(this->speed,0.0f, 0.0f));

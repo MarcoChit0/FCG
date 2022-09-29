@@ -21,6 +21,9 @@ uniform mat4 projection;
 // Identificador que define qual objeto está sendo desenhado no momento
 #define PLAYER_ID 0
 #define MISSILE_ID 1
+#define UFO_ID 2
+#define COW_ID 3
+
 uniform int object_id;
 
 // Parâmetros da axis-aligned bounding box (AABB) do modelo

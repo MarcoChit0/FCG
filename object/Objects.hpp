@@ -4,6 +4,7 @@
 #include "Player.hpp"
 #include "Missile.hpp"
 #include "UFO.hpp"
+#include "Cow.hpp"
 #include "ObjectModelMatrix.hpp"
 
 double number_of_missiles = 0;
@@ -21,9 +22,9 @@ void create_geometric_objects();
 void player_shoot();
 void new_object_being_added_to_virtual_screen(ObjectModelMatrix* obj);
 
-Player* player = new Player(PLAYER_ID, "player", Matrix_Translate(0.0f,0.0f,1.0f)*Matrix_Scale(0.1f, 0.1f, 0.1f), "../../data/SmallSpaceFighter.obj");
+Player* player = new Player(PLAYER_ID, "player", Matrix_Translate(0.0f,0.0f,1.0f)*Matrix_Scale(0.1f, 0.1f, 0.1f));
 UFO* ufo = new UFO(UFO_ID, "ufo", Matrix_Translate(0.0f, 0.0f, -1.0f)*Matrix_Scale(0.1f, 0.1f, 0.1f));
+Cow* cow = new Cow(COW_ID, "cow", Matrix_Scale(0.1f, 0.1f, 0.1f));
 
-
-vector <ObjectModelMatrix*> objects = {player, ufo};
+vector <ObjectModelMatrix*> objects = {player, ufo, cow};
 #endif
