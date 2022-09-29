@@ -5,6 +5,7 @@
 #include "Missile.hpp"
 #include "UFO.hpp"
 #include "Cow.hpp"
+#include "Asteroid.hpp"
 #include "ObjectModelMatrix.hpp"
 
 double number_of_missiles = 0;
@@ -25,6 +26,7 @@ void new_object_being_added_to_virtual_screen(ObjectModelMatrix* obj);
 Player* player = new Player(PLAYER_ID, "player", Matrix_Translate(0.0f,0.0f,1.0f)*Matrix_Scale(0.1f, 0.1f, 0.1f));
 UFO* ufo = new UFO(UFO_ID, "ufo", Matrix_Translate(0.0f, 0.0f, -1.0f)*Matrix_Scale(0.1f, 0.1f, 0.1f));
 Cow* cow = new Cow(COW_ID, "cow", Matrix_Scale(0.1f, 0.1f, 0.1f));
+Asteroid* asteroid = new Asteroid(ASTEROID_ID, "asteroid",  Matrix_Translate(0.0f, 0.5f, 0.0f)*Matrix_Scale(0.2f, 0.2f, 0.2f));
 
-vector <ObjectModelMatrix*> objects = {player, ufo, cow};
+vector <ObjectModelMatrix*> objects = {player, ufo, cow, asteroid};
 #endif
