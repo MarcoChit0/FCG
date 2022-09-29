@@ -24,6 +24,7 @@ void new_object_being_added_to_virtual_screen(ObjectModelMatrix* obj)
 }
 
 void player_shoot(){
+    // TODO: cooldown system
     number_of_missiles += 1;
     Missile* m = new Missile(MISSILE_ID, "missile", player->get_model()*ADJUST_MISSILE_POSITION);
     m->go_foward();
