@@ -118,7 +118,7 @@ void frame(GLFWwindow *window)
     glUniformMatrix4fv(view_uniform, 1, GL_FALSE, glm::value_ptr(view));
     glUniformMatrix4fv(projection_uniform, 1, GL_FALSE, glm::value_ptr(projection));
 
-    draw_objects(objects);
+    draw_objects();
 
     // Imprime dados na tela
     TextRendering_ShowEulerAngles(window);
