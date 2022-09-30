@@ -5,14 +5,15 @@ using namespace std;
 void draw_objects(){
     for(unsigned long i = 0; i < objects.size(); i++){
         objects[i]->draw();
-    }
+
+    }        
 }
 
 void create_geometric_objects()
 {
     for (unsigned long i = 0; i < objects.size(); i++)
     {   
-        new_object_being_added_to_virtual_screen(objects[i]);
+        new_object_being_added_to_virtual_screen(objects[i]);    
     }
 }
 
@@ -20,7 +21,8 @@ void new_object_being_added_to_virtual_screen(ObjectModelMatrix* obj)
 {
     ObjectModel object_model(obj->get_path());
     ComputeNormals(&object_model);
-    BuildTrianglesAndAddToVirtualScene(&object_model); 
+    BuildTrianglesAndAddToVirtualScene(&object_model);
+    obj->recover_bbox();
 }
 
 void player_shoot(){

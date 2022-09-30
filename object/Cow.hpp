@@ -6,6 +6,8 @@
 
 class Cow : public ObjectModelMatrix
 {
+    private:
+    int life_points;
     public:
     Cow(int id, string name, glm::mat4 model, vector<glm::mat4> transform):
     ObjectModelMatrix(id, name, model, COW_OBJ_PATH, transform)

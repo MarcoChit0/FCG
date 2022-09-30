@@ -120,6 +120,8 @@ void frame(GLFWwindow *window)
 
     draw_objects();
 
+    collision_handler(view, projection);
+
     // Imprime dados na tela
     TextRendering_ShowEulerAngles(window);
     TextRendering_ShowProjection(window);

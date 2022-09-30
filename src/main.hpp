@@ -53,6 +53,10 @@
 #include "../object/Objects.hpp"
 #include "../object/Objects.cpp"
 
+// COLLISIONS:
+#include "../collisions/collisions.hpp"
+#include "../collisions/collisions.cpp"
+
 // CONST:
 const char* window_title = "INF01047 - Trabalho Final";
 GLFWwindow *initialize(int argc, char *argv[]);

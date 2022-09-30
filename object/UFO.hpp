@@ -6,6 +6,8 @@
 
 class UFO : public ComplexObjectModelMatrix
 {
+    private:
+    int life_points;
     public: 
     UFO(int id, string name, glm::mat4 model, vector<glm::mat4> transform):
     ComplexObjectModelMatrix(id, name, model, UFO_OBJ_PATH, transform)

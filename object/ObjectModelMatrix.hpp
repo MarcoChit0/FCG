@@ -28,6 +28,8 @@ private:
     glm::mat4 model;
     vector <glm::mat4> transform;
     string path;
+    glm::vec3 bbox_min;
+    glm::vec3 bbox_max;
 
 public:
     // GETS:
@@ -35,9 +37,13 @@ public:
     int get_id() { return this->id; }
     glm::mat4 get_model() { return this->model; }
     string get_path() { return this->path; }
+    glm::vec3 get_bbox_min() {return this->bbox_min; }
+    glm::vec3 get_bbox_max() {return this->bbox_max; }
 
     // SETS:
     void set_transform(vector<glm::mat4> transform){ this->transform = transform; }
+    void set_bbox_min(glm::vec3 bbox_min) { this->bbox_min = bbox_min; }
+    void set_bbox_max(glm::vec3 bbox_max) { this->bbox_max = bbox_max; }
 
     // UPDATES:
     void update_model(glm::mat4 op) { this->model = this->model * op; }
@@ -49,7 +55,7 @@ public:
         this->transform = transform;
         this->path = path;
     }
-    
+
     ObjectModelMatrix(int id, string name, glm::mat4 model, string path) : ObjectModelMatrix(id, name, model, path, {}) {}
     
     // animation
@@ -67,6 +73,11 @@ public:
         glUniformMatrix4fv(model_uniform, 1, GL_FALSE, glm::value_ptr(model));
         glUniform1i(object_id_uniform, this->id);
         DrawVirtualObject(this->name.c_str());
+    }
+
+    virtual void recover_bbox(){
+        this->bbox_max = g_VirtualScene[this->name].bbox_max;
+        this->bbox_min = g_VirtualScene[this->name].bbox_min;
     }
 };
 
@@ -116,6 +127,30 @@ class ComplexObjectModelMatrix : public ObjectModelMatrix
                 exit(1);
             }
         }
+
+        void recover_bbox(){
+            float   min_x = g_VirtualScene[this->objs_names[0]].bbox_min.x, 
+                    min_y = g_VirtualScene[this->objs_names[0]].bbox_min.y, 
+                    min_z = g_VirtualScene[this->objs_names[0]].bbox_min.z;
+            float   max_x = g_VirtualScene[this->objs_names[0]].bbox_max.x, 
+                    max_y = g_VirtualScene[this->objs_names[0]].bbox_max.y, 
+                    max_z = g_VirtualScene[this->objs_names[0]].bbox_max.z;
+            // É necessário pegar os menores e maiores coordenadas de TODOS os componentes.
+            for(unsigned long i = 0; i < this->objs_names.size(); i++){
+                if(min_x > g_VirtualScene[this->objs_names[i]].bbox_min.x) min_x = g_VirtualScene[this->objs_names[i]].bbox_min.x;
+                if(min_y > g_VirtualScene[this->objs_names[i]].bbox_min.y) min_y = g_VirtualScene[this->objs_names[i]].bbox_min.y;
+                if(min_z > g_VirtualScene[this->objs_names[i]].bbox_min.z) min_z = g_VirtualScene[this->objs_names[i]].bbox_min.z;
+                
+                if(max_x < g_VirtualScene[this->objs_names[i]].bbox_max.x) max_x = g_VirtualScene[this->objs_names[i]].bbox_max.x;
+                if(max_y < g_VirtualScene[this->objs_names[i]].bbox_max.y) max_y = g_VirtualScene[this->objs_names[i]].bbox_max.y;
+                if(max_z < g_VirtualScene[this->objs_names[i]].bbox_max.z) max_z = g_VirtualScene[this->objs_names[i]].bbox_max.z;
+            }    
+            glm::vec3 bbox_min = glm::vec3(min_x, min_y, min_z);
+            glm::vec3 bbox_max = glm::vec3(max_x, max_y, max_z);
+            this->set_bbox_min(bbox_min);
+            this->set_bbox_max(bbox_max);
+        }
+
         virtual void draw(){
             this->apply_transform();
             for(unsigned long i=0; i < this->objs_names.size();i++){
@@ -125,6 +160,6 @@ class ComplexObjectModelMatrix : public ObjectModelMatrix
                 DrawVirtualObject(this->objs_names[i].c_str());
             }
         }
-
+        vector <string> get_components() {return this->objs_names;}
 };
 #endif
