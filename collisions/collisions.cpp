@@ -57,6 +57,9 @@ void collision_handler(){
         if (objects[i]->get_id() == MISSILE_ID && collision_cube_cylinder(ufo, objects[i])){
             cout << "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$" << endl;
         }
+        if (objects[i]->get_id() == MISSILE_ID && collision_cylinder_sphere(objects[i], asteroid2)){
+            cout << "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&77" << endl;
+        }
     }
 }
 
@@ -89,9 +92,10 @@ bool collision_cube_cylinder(ObjectModelMatrix* cube_object,ObjectModelMatrix* c
         (pmax_circulo_base_cilindro.y + pmin_circulo_base_cilindro.y)/2, // coord[z]
         1.0f);
 
-    // recuperar pontos específicos do cubo: seus 8 vértices.
+    // componentes x e z do circulo dianteiro
     float pmax_cilindro_x_positions[] = {pmax_cilindro.x - raio, pmax_cilindro.x, pmax_cilindro.x + raio};
     float pmax_cilindro_z_positions[] = {pmax_cilindro.z - raio, pmax_cilindro.z, pmax_cilindro.z + raio};
+    // componentes x e z do circulo trasiero 
     float pmin_cilindro_x_positions[] = {pmin_cilindro.x - raio, pmin_cilindro.x, pmin_cilindro.x + raio};
     float pmin_cilindro_z_positions[] = {pmin_cilindro.z - raio, pmin_cilindro.z, pmin_cilindro.z + raio};
     if(pmax_cilindro.y>=bbox_min_cube.y){
@@ -118,37 +122,74 @@ bool collision_cube_cylinder(ObjectModelMatrix* cube_object,ObjectModelMatrix* c
     }
     return false;
 }
-    // for (int z = 0; z < 2; z++){
-    //     for (int y = 0; y < 2; y++){
-    //         for (int x = 0; x < 2; x++){
-    //             cube_point = glm::vec4(bbox_x[x], bbox_y[y], bbox_z[z], 1.0f);
-    //             vector_cube_pmaxCylinder = cube_point - pmax_cilindro;
-    //             vector_cube_pminCylinder = cube_point - pmin_cilindro;
 
-    //             if( 
-    //                 /*  como o míssel viaja em linha reta sempre somando sua velocidade ao eixo Y, 
-    //                     ele só colidirá com a nave quando ele passar por pelo menos o componente Y da posição da nave*/
-    //                 (pmax_cilindro.y >= bbox_min_cube.y) &&
-    //                 (
-    //                     /* verifica se houve colisão da parte do míssel mais próxima a nave com a nave*/
-    //                     (length(vector_cube_pmaxCylinder)<raio) || 
-    //                     /* verifica se houve colisão da parte do míssel mais longe a nave com a nave*/
-    //                     (length(vector_cube_pminCylinder)<raio)
-    //                 )
-    //             )
-    //             {
-    //                 return true;
-    //             }
-    //         }   
-    //     }       
-    // }
-                // cout << "--------------------\n";
-                // cout << "raio: " << raio << endl; 
-                // cout << "vector_cube_pmaxCylinder: " << to_string(vector_cube_pmaxCylinder) << endl;
-                // cout << "len(vector_cube_pmaxCylinder): " << length(vector_cube_pmaxCylinder) << endl;
-                // cout << "vector_cube_pminCylinder: " << to_string(vector_cube_pminCylinder) << endl;
-                // cout << "len(vector_cube_pminCylinder): " << length(vector_cube_pminCylinder) << endl;
-                // cout << "pmax_cilindro: " << to_string(pmax_cilindro) << endl;
-                // cout << "pmin_cilindro: " << to_string(pmin_cilindro) << endl;
-                // cout << "cube_point: " << to_string(cube_point) << endl;
-                // cout << "bbox_min_cube: " << to_string(bbox_min_cube) << endl;
+bool collision_cylinder_sphere(ObjectModelMatrix* cylinder_object,ObjectModelMatrix* sphere_object){
+    // recupera as bbox.
+    glm::vec4 bbox_min_cylinder =   glm::vec4(cylinder_object->get_bbox_min().x,cylinder_object->get_bbox_min().y,cylinder_object->get_bbox_min().z,1.0f) ;
+    glm::vec4 bbox_max_cylinder =   glm::vec4(cylinder_object->get_bbox_max().x,cylinder_object->get_bbox_max().y,cylinder_object->get_bbox_max().z,1.0f) ;
+    glm::vec4 bbox_min_sphere   =   glm::vec4(sphere_object->get_bbox_min().x,sphere_object->get_bbox_min().y,sphere_object->get_bbox_min().z,1.0f) ;
+    glm::vec4 bbox_max_sphere   =   glm::vec4(sphere_object->get_bbox_max().x,sphere_object->get_bbox_max().y,sphere_object->get_bbox_max().z,1.0f) ;
+
+    // aplica as mesmas transformações que os objetos sofreram sobre as suas respectivas bbox.
+    bbox_min_cylinder =     cylinder_object->get_model() * bbox_min_cylinder;
+    bbox_max_cylinder =     cylinder_object->get_model() * bbox_max_cylinder;
+    bbox_min_sphere =       sphere_object->get_model() * bbox_min_sphere;
+    bbox_max_sphere =       sphere_object->get_model() * bbox_max_sphere;   
+
+    // recupera raio e centro da esfera.
+    glm::vec4 temp = (bbox_max_sphere + bbox_min_sphere);
+    glm::vec4 sphere_center = glm::vec4(temp.x/2, temp.y/2, temp.z/2, 1.0f);
+    float ray = length(bbox_max_sphere - sphere_center)/2;
+
+    // recupera centros dos circulos (de baixo e de cima) do cilindro.
+    glm::vec2 pmax_circulo_base_cilindro = glm::vec2(bbox_max_cylinder.x, bbox_max_cylinder.z);
+    glm::vec2 pmin_circulo_base_cilindro = glm::vec2(bbox_min_cylinder.x, bbox_min_cylinder.z);
+    float raio = length(pmax_circulo_base_cilindro - pmin_circulo_base_cilindro)/2;
+    // centro do circulo de cima.
+    glm::vec4 pmax_cilindro = glm::vec4(
+        (pmax_circulo_base_cilindro.x + pmin_circulo_base_cilindro.x)/2,
+        bbox_max_cylinder.y,
+        (pmax_circulo_base_cilindro.y + pmin_circulo_base_cilindro.y)/2, // coord[z]
+        1.0f);
+    // centro do circulo de baixo.
+    glm::vec4 pmin_cilindro = glm::vec4(
+        (pmax_circulo_base_cilindro.x + pmin_circulo_base_cilindro.x)/2,
+        bbox_min_cylinder.y,
+        (pmax_circulo_base_cilindro.y + pmin_circulo_base_cilindro.y)/2, // coord[z]
+        1.0f);
+
+    // posições de x e de z do circulo de cima do cilindro.
+    float pmax_cilindro_x_positions[] = {pmax_cilindro.x - raio, pmax_cilindro.x, pmax_cilindro.x + raio};
+    float pmax_cilindro_z_positions[] = {pmax_cilindro.z - raio, pmax_cilindro.z, pmax_cilindro.z + raio};
+    // posições de x e de z do circulo de baixo do cilindro.
+    float pmin_cilindro_x_positions[] = {pmin_cilindro.x - raio, pmin_cilindro.x, pmin_cilindro.x + raio};
+    float pmin_cilindro_z_positions[] = {pmin_cilindro.z - raio, pmin_cilindro.z, pmin_cilindro.z + raio};
+
+    glm::vec4 cylinder_point;
+    glm::vec4 test_vector;
+    // testa colisão do cirulo de cima com a esfera.
+    if(pmax_cilindro.y>= bbox_min_sphere.y){
+        for(int z = 0; z < 3; z++){
+            for(int x = 0; x <3; x++){
+                cylinder_point = glm::vec4(pmax_cilindro_x_positions[x],pmax_cilindro.y,pmax_cilindro_z_positions[z], 1.0f);
+                test_vector = cylinder_point - sphere_center;
+                if(length(test_vector)<ray){
+                    return true;
+                }
+            }
+        }
+    }
+    // testa colisão do circulo de baixo com a esfera.
+    if(pmin_cilindro.y>= bbox_min_sphere.y){
+        for(int z = 0; z < 3; z++){
+            for(int x = 0; x <3; x++){
+                cylinder_point = glm::vec4(pmin_cilindro_x_positions[x],pmin_cilindro.y,pmin_cilindro_z_positions[z], 1.0f);
+                test_vector = cylinder_point - sphere_center;
+                if(length(test_vector)<ray){
+                    return true;
+                }
+            }
+        }
+    }
+    return false;
+}
