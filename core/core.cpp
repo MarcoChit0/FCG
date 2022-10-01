@@ -723,3 +723,24 @@ glm::mat4 create_projection_matrix(){
         return Matrix_Orthographic(l, r, b, t, NEARPLANE, FARPLANE);
     }
 }
+
+void game_logic(){
+    if (player_won_the_game){
+        cout << "\n\n#########################################################################\n";
+        cout << "PARABENS, VOCÊ DERROTOU O CHEFÃO FINAL E, COM ISSO, RECUPEROU A VAQUINHA!" << endl;
+        cout << "#########################################################################\n\n";
+        exit(1);
+    }
+    if (player_lost_the_game_by_being_killed){
+        cout << "\n\n#########################################################################\n";
+        cout << "PARABENS POR TER FALHADO. A VAQUINHA FOI ABDUZIDA!" << endl;
+        cout << "#########################################################################\n\n";
+        exit(1);
+    }
+    if (player_lost_the_game_killing_the_little_cow){
+        cout << "\n\n#########################################################################\n";
+        cout << "AH NÃO, MEU! TU BAZUCOU A VAQUINHA..." << endl;
+        cout << "#########################################################################\n\n";
+        exit(1);
+    }
+}

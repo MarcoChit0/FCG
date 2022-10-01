@@ -50,15 +50,39 @@ bool collision_cube_sphere(ObjectModelMatrix* cube_object,ObjectModelMatrix* sph
 }
 
 void collision_handler(){
-    if (collision_cube_sphere(player, asteroid)){
-        cout << "##################################################" << endl;
-    }
     for(unsigned long i = 0; i < objects.size(); i++){
+        // MISSILE HITS UFO
         if (objects[i]->get_id() == MISSILE_ID && collision_cube_cylinder(ufo, objects[i])){
-            cout << "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$" << endl;
+           collided_missile_ufo(objects[i], i);
+           return;
         }
-        if (objects[i]->get_id() == MISSILE_ID && collision_cylinder_sphere(objects[i], asteroid2)){
-            cout << "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&77" << endl;
+        if (objects[i]->get_id() == MISSILE_ID && collision_cube_cylinder(cow, objects[i])){
+           collided_missile_cow(objects[i], i);
+           return;
+        }
+        // MISSILE HITS ASTEROID
+        if (objects[i]->get_id() == MISSILE_ID){
+            for(unsigned long j = i; j < objects.size(); j++){
+                if (objects[j]->get_id() == ASTEROID_ID && collision_cylinder_sphere(objects[i], objects[j])){
+                    collided_missile_asteroid(objects[i], i, objects[j], j);
+                    return;
+                }
+            }
+        }
+        // ASTEROID HITS MISSILE
+        if (objects[i]->get_id() == ASTEROID_ID){
+            for(unsigned long j = i; j < objects.size(); j++){
+                if (objects[j]->get_id() == MISSILE_ID && collision_cylinder_sphere(objects[j], objects[i])){
+                    collided_asteroid_missile(objects[i], i, objects[j], j);
+                    cout << "oie" << endl;
+                    return;
+                }
+            }
+        }
+        // ASTEROID HITS PLAYER
+        if (objects[i]->get_id() == ASTEROID_ID && collision_cube_sphere(player, objects[i])){
+            collided_player_asteroid(objects[i], i);
+            return;
         }
     }
 }
@@ -192,4 +216,36 @@ bool collision_cylinder_sphere(ObjectModelMatrix* cylinder_object,ObjectModelMat
         }
     }
     return false;
+}
+
+void collided_player_asteroid(ObjectModelMatrix* a, int a_pos){
+    objects.erase(objects.begin()+a_pos);
+    delete a;
+    player->take_damage();
+}
+
+void collided_missile_asteroid(ObjectModelMatrix* m, int m_pos, ObjectModelMatrix* a, int a_pos){
+    objects.erase(objects.begin()+a_pos);
+    objects.erase(objects.begin()+m_pos);
+    delete a;
+    delete m;
+}
+
+void collided_asteroid_missile(ObjectModelMatrix* a, int a_pos, ObjectModelMatrix* m, int m_pos){
+    objects.erase(objects.begin()+m_pos);
+    objects.erase(objects.begin()+a_pos);
+    delete m;
+    delete a;
+}
+
+void collided_missile_ufo(ObjectModelMatrix* m, int m_pos){
+    objects.erase(objects.begin()+m_pos);
+    delete m;
+    ufo->take_damage();
+};
+
+void collided_missile_cow(ObjectModelMatrix* m, int m_pos){
+    objects.erase(objects.begin()+m_pos);
+    delete m;
+    cow->take_damage();
 }

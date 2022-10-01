@@ -119,8 +119,8 @@ void frame(GLFWwindow *window)
     glUniformMatrix4fv(projection_uniform, 1, GL_FALSE, glm::value_ptr(projection));
 
     draw_objects();
-
     collision_handler();
+    game_logic();
 
     // Imprime dados na tela
     TextRendering_ShowEulerAngles(window);

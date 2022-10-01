@@ -27,7 +27,7 @@ Player* player = new Player(PLAYER_ID, "player", Matrix_Translate(0.0f,0.0f,2.0f
 UFO* ufo = new UFO(UFO_ID, "ufo", Matrix_Translate(0.0f, 0.0f, -2.0f)*Matrix_Scale(0.1f, 0.1f, 0.1f));
 Cow* cow = new Cow(COW_ID, "cow", Matrix_Scale(0.1f, 0.1f, 0.1f));
 Asteroid* asteroid = new Asteroid(ASTEROID_ID, "asteroid",  Matrix_Translate(1.0f, 0.0f, 2.0f)*Matrix_Scale(0.2f, 0.2f, 0.2f));
-Asteroid* asteroid2 = new Asteroid(ASTEROID_ID, "asteroid",  Matrix_Scale(0.3f, 0.3f, 0.3f));
+Asteroid* asteroid2 = new Asteroid(ASTEROID_ID, "asteroid",  Matrix_Translate(-1.0f, 0.0f, 0.0f)*Matrix_Scale(0.3f, 0.3f, 0.3f));
 
 vector <ObjectModelMatrix*> objects = {player, ufo, cow, asteroid,asteroid2};
 #endif

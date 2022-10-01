@@ -23,6 +23,11 @@
 #define NEARPLANE  -0.1f
 #define FARPLANE  -10.0f
 
+bool player_lost_the_game_by_being_killed = false;
+bool player_lost_the_game_killing_the_little_cow = false;
+bool player_won_the_game = false;
+
+
 // Variáveis que definem um programa de GPU (shaders).
 GLuint vertex_shader_id;
 GLuint fragment_shader_id;
@@ -68,5 +73,6 @@ void PrintObjModelInfo(ObjectModel*);
 void load_texture_images(std::vector<std::string> paths);
 glm::mat4 create_view_matrix();
 glm::mat4 create_projection_matrix();
+void game_logic();
 
 #endif

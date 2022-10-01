@@ -5,6 +5,7 @@
 #include "ObjectModelMatrix.hpp"
 #define SPEED 1.0f
 #define PLAYER_OBJ_PATH "../../data/player/SmallSpaceFighter.obj"
+#define PLAYER_STARTING_LIFE_POINTS 3
 
 class Player : public ComplexObjectModelMatrix
 {
@@ -20,6 +21,7 @@ class Player : public ComplexObjectModelMatrix
             this->shots = 0;
             this->speed = SPEED;
             this->movement = {};
+            this->life_points = PLAYER_STARTING_LIFE_POINTS;
         }
         Player(int id, string name, glm::mat4 model, string path) : 
         ComplexObjectModelMatrix(id, name, model, path)
@@ -27,11 +29,19 @@ class Player : public ComplexObjectModelMatrix
             this->shots = 0;
             this->speed = SPEED;
             this->movement = {};
+            this->life_points = PLAYER_STARTING_LIFE_POINTS;
         } 
         Player(int id, string name, glm::mat4 model) : Player(id, name, model, PLAYER_OBJ_PATH)
         {}
 
-        void take_damage();
+        void take_damage(){
+            this->life_points -= 1;
+            cout << "\n\n #### PLAYER: "<<this->life_points<< " ####\n\n";
+            if (this->life_points == 0){
+                player_lost_the_game_by_being_killed = true;
+            }
+        }
+
         void move_right(){
             this->movement.push_back(Matrix_Translate(this->speed,0.0f, 0.0f));
         }
