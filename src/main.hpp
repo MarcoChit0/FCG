@@ -15,6 +15,9 @@
 #include <sstream>
 #include <stdexcept>
 #include <algorithm>
+#include <stdio.h>
+#include <stdlib.h>
+#include<time.h>
 
 // Headers das bibliotecas OpenGL
 #include <glad/glad.h>  // Criação de contexto OpenGL 3.3

@@ -2,6 +2,8 @@
 
 int main(int argc, char *argv[])
 {
+    srand(time(0));
+
     GLFWwindow *window = initialize(argc, argv);
 
     while (!glfwWindowShouldClose(window))
@@ -101,6 +103,8 @@ GLFWwindow *initialize(int argc, char *argv[])
 // Realiza as operações de rendeziração
 void frame(GLFWwindow *window)
 {
+    float current_time = glfwGetTime();
+
     // Definimos a cor do "fundo" do framebuffer como branco. 
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
@@ -118,6 +122,7 @@ void frame(GLFWwindow *window)
     glUniformMatrix4fv(view_uniform, 1, GL_FALSE, glm::value_ptr(view));
     glUniformMatrix4fv(projection_uniform, 1, GL_FALSE, glm::value_ptr(projection));
 
+    ufo_throws_asteroid(current_time);
     draw_objects();
     collision_handler();
     game_logic();

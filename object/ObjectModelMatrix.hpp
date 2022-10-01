@@ -39,6 +39,7 @@ public:
     string get_path() { return this->path; }
     glm::vec3 get_bbox_min() {return this->bbox_min; }
     glm::vec3 get_bbox_max() {return this->bbox_max; }
+    vector<glm::mat4> get_transform() { return this->transform; }
 
     // SETS:
     void set_transform(vector<glm::mat4> transform){ this->transform = transform; }
@@ -59,10 +60,10 @@ public:
     ObjectModelMatrix(int id, string name, glm::mat4 model, string path) : ObjectModelMatrix(id, name, model, path, {}) {}
     
     // animation
-    void apply_transform(){
+    virtual void apply_transform(){
         if (!this->transform.empty()){
-            for(int i = this->transform.size() - 1; i >=0; i --){
-                this->model = this->model * this->transform[i];
+            for(unsigned long i = 0; i < this->transform.size(); i ++){
+                this->model = this->model * this->transform[this->transform.size() - (i+1)];
             }
         }
     }

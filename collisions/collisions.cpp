@@ -8,37 +8,50 @@ bool collision_cube_sphere(ObjectModelMatrix* cube_object,ObjectModelMatrix* sph
     glm::vec4 bbox_min_sphere   =   glm::vec4(sphere_object->get_bbox_min().x,sphere_object->get_bbox_min().y,sphere_object->get_bbox_min().z,1.0f) ;
     glm::vec4 bbox_max_sphere   =   glm::vec4(sphere_object->get_bbox_max().x,sphere_object->get_bbox_max().y,sphere_object->get_bbox_max().z,1.0f) ;
 
+    //cout << "\n\nmax: "<<to_string(bbox_max_sphere) << endl;
+    //cout << "min: "<<to_string(bbox_min_sphere) << endl;
+    //cout << "raio deles: " << length(bbox_max_sphere - bbox_min_sphere)/2 << endl;
+
     // aplicar transformações model para as bounding box acompanharem os objetos no espaço.
     bbox_min_cube =      cube_object->get_model() * bbox_min_cube;
     bbox_max_cube =      cube_object->get_model() * bbox_max_cube;
     bbox_min_sphere =    sphere_object->get_model() * bbox_min_sphere;
     bbox_max_sphere =    sphere_object->get_model() * bbox_max_sphere;   
 
+
     // receuperar coordenadas específicas da esfera: centro e raio.
     glm::vec4 temp = (bbox_max_sphere + bbox_min_sphere);
     glm::vec4 sphere_center = glm::vec4(temp.x/2, temp.y/2, temp.z/2, 1.0f);
-    float ray = length(bbox_max_sphere - sphere_center)/2;
+    float ray = length(bbox_max_sphere - sphere_center);
+    
 
     // recuperar pontos específicos do cubo: seus 8 vértices.
-    float bbox_x[] = {bbox_min_cube.x, bbox_max_cube.x};
-    float bbox_y[] = {bbox_min_cube.y, bbox_max_cube.y};
-    float bbox_z[] = {bbox_min_cube.z, bbox_max_cube.z};
+    float bbox_x[] = {bbox_min_cube.x, (bbox_min_cube.x + bbox_max_cube.x)/2, bbox_max_cube.x};
+    float bbox_y[] = {bbox_min_cube.y, (bbox_min_cube.y + bbox_max_cube.y)/2,bbox_max_cube.y};
+    float bbox_z[] = {bbox_min_cube.z, (bbox_min_cube.z + bbox_max_cube.z)/2, bbox_max_cube.z};
     glm::vec4 cube_point;
     glm::vec4 test_vector;
 
+    //cout << "\n#############################\n";
     //  para cada ponto p em 8 pontos do cubo:
     //      gerar vetor do ponto p ao centro da esfera
     //      calcular comprimento desse vetor
     //      se esse comprimento for menor que o do raio da esfera:
     //          houve colisão
     //  se não nenhum comprimento for menor do que o do raio da esfera, não colidiu    
-    for (int z = 0; z < 2; z++){
-        for (int y = 0; y < 2; y++){
-            for (int x = 0; x < 2; x++){
+    for (int z = 0; z < 3; z++){
+        for (int y = 0; y < 3; y++){
+            for (int x = 0; x < 3; x++){
                 // ponto p
                 cube_point = glm::vec4(bbox_x[x], bbox_y[y], bbox_z[z], 1.0f);
                 // vetor do ponto p ao centro da esfera 
                 test_vector = cube_point - sphere_center;
+                //cout << "\n--------------------\n";
+                //cout << "cube point: " << to_string(cube_point) << endl;
+                //cout << "bbox_max_sphere: " << to_string(bbox_max_sphere) << endl;
+                //cout << "sphere center: " << to_string(sphere_center) << endl;
+                //cout << "length(test_vector): " << length(test_vector)<< endl;
+                //cout << "ray: " << ray << endl;
                 if(length(test_vector)<ray){
                     // houve colisão por um dos pontos do cubo estar "tocando" no raio 
                     return true;
@@ -51,13 +64,14 @@ bool collision_cube_sphere(ObjectModelMatrix* cube_object,ObjectModelMatrix* sph
 
 void collision_handler(){
     for(unsigned long i = 0; i < objects.size(); i++){
+        // MISSILE HITS COW
+        if (objects[i]->get_id() == MISSILE_ID && collision_cube_cylinder(cow, objects[i])){
+           collided_missile_cow(objects[i], i);
+           return;
+        }        
         // MISSILE HITS UFO
         if (objects[i]->get_id() == MISSILE_ID && collision_cube_cylinder(ufo, objects[i])){
            collided_missile_ufo(objects[i], i);
-           return;
-        }
-        if (objects[i]->get_id() == MISSILE_ID && collision_cube_cylinder(cow, objects[i])){
-           collided_missile_cow(objects[i], i);
            return;
         }
         // MISSILE HITS ASTEROID
@@ -74,7 +88,6 @@ void collision_handler(){
             for(unsigned long j = i; j < objects.size(); j++){
                 if (objects[j]->get_id() == MISSILE_ID && collision_cylinder_sphere(objects[j], objects[i])){
                     collided_asteroid_missile(objects[i], i, objects[j], j);
-                    cout << "oie" << endl;
                     return;
                 }
             }
