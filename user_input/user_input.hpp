@@ -14,11 +14,6 @@
 // Razão de proporção da janela (largura/altura). Veja função FramebufferSizeCallback().
 float g_ScreenRatio = 1.0f;
 
-// Ângulos de Euler que controlam a rotação de um dos cubos da cena virtual
-float g_AngleX = 0.0f;
-float g_AngleY = 0.0f;
-float g_AngleZ = 0.0f;
-
 // Usuário pressionou tecla do mouse
 bool g_LeftMouseButtonPressed = false;
 bool g_RightMouseButtonPressed = false;

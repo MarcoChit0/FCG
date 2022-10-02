@@ -5,12 +5,14 @@
 #define COW_OBJ_PATH "../../data/cow/cow.obj"
 #define COW_STARTING_LIFE_POINTS 1
 #define BIND_DISTANCE 1.75f
+#define ROTATION_DEGREE (3.1415/16)
 #define COW_BINDED_TO_UFO_MATRIX Matrix_Translate(0.0f, -BIND_DISTANCE, 0.0f)
 
 class Cow : public ObjectModelMatrix
 {
     private:
     int life_points;
+    vector<glm::mat4> movement;
     public:
     Cow(int id, string name, glm::mat4 model, vector<glm::mat4> transform):
     ObjectModelMatrix(id, name, model, COW_OBJ_PATH, transform)
@@ -30,6 +32,23 @@ class Cow : public ObjectModelMatrix
     }
     void bind_to_ufo(glm::mat4 ufo_model){
         this->set_model(ufo_model*COW_BINDED_TO_UFO_MATRIX);
+    }
+    void rotate_x(){
+        this->movement.push_back(Matrix_Rotate_X(ROTATION_DEGREE));
+    }
+    void rotate_y(){
+        this->movement.push_back(Matrix_Rotate_Y(ROTATION_DEGREE));
+    }
+    void rotate_z(){
+        this->movement.push_back(Matrix_Rotate_Z(ROTATION_DEGREE));
+    }
+    void draw(){
+        if (this->movement.size() > 0){
+            for(unsigned long i = 0; i < this->movement.size(); i++){
+                this->update_model(this->movement[this->movement.size()-(i+1)]);
+            }                
+        }
+        ObjectModelMatrix::draw();
     }
 };
 

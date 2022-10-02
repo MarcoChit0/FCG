@@ -128,7 +128,6 @@ void frame(GLFWwindow *window)
     game_logic();
 
     // Imprime dados na tela
-    TextRendering_ShowEulerAngles(window);
     TextRendering_ShowProjection(window);
     TextRendering_ShowFramesPerSecond(window);
     glfwSwapBuffers(window);
