@@ -3,7 +3,7 @@
 
 #include "ObjectModelMatrix.hpp"
 #define ASTEROID_OBJ_PATH "../../data/asteroid/A2.obj"
-#define ADJUST_ASTEROID_SIZE Matrix_Scale(1.5f, 1.5f, 1.5f)
+#define ADJUST_ASTEROID_SIZE Matrix_Scale(2.0f, 2.0f, 2.0f)
 #define BACKWARD_SPEED 0.2f
 #define BACKWARD_TRANSFORMATION Matrix_Translate(0.0f, 0.0f, BACKWARD_SPEED)
 

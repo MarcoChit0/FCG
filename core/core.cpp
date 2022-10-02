@@ -744,3 +744,28 @@ void game_logic(){
         exit(1);
     }
 }
+
+
+glm::vec4 curva_Bezier(int n, glm::vec4 pontos_controle[], float t){
+    auto soma = glm::vec4(0.0f,0.0f,0.0f, 1.0f);
+    for (int i = 0; i <= n; i++){
+        soma += Bernstein(n, i, t) * pontos_controle[i];
+    }
+    return soma;
+}
+
+float Bernstein(int n, int k, float t){
+    float polinomio_Bernstein =  ((float) fac(n)/ (float)(fac(k) * fac(n - k)));
+    polinomio_Bernstein *= pow(t,k);
+    polinomio_Bernstein *= pow(1-t,n-k);
+    return polinomio_Bernstein;
+}   
+
+int fac(int n){
+    if (n == 0){
+        return 1;
+    }
+    else{
+        return fac(n-1)* n;
+    }
+}

@@ -4,6 +4,9 @@ using namespace std;
 
 void draw_objects(){
     for(unsigned long i = 0; i < objects.size(); i++){
+        if(objects[i]->get_id() == COW_ID){
+            cow->bind_to_ufo(ufo->get_model());
+        }
         objects[i]->draw();
     }        
 }

@@ -13,12 +13,11 @@ class Player : public ComplexObjectModelMatrix
         int life_points;
         float speed;
         vector<glm::mat4> movement;
-        double shots;
+
     public:
         Player(int id, string name, glm::mat4 model, string path, vector<glm::mat4> transform, vector <string> objs_names):
         ComplexObjectModelMatrix(id, name, model, path, transform, objs_names) 
         {
-            this->shots = 0;
             this->speed = SPEED;
             this->movement = {};
             this->life_points = PLAYER_STARTING_LIFE_POINTS;
@@ -26,7 +25,6 @@ class Player : public ComplexObjectModelMatrix
         Player(int id, string name, glm::mat4 model, string path) : 
         ComplexObjectModelMatrix(id, name, model, path)
         {
-            this->shots = 0;
             this->speed = SPEED;
             this->movement = {};
             this->life_points = PLAYER_STARTING_LIFE_POINTS;

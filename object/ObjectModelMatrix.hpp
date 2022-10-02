@@ -45,6 +45,7 @@ public:
     void set_transform(vector<glm::mat4> transform){ this->transform = transform; }
     void set_bbox_min(glm::vec3 bbox_min) { this->bbox_min = bbox_min; }
     void set_bbox_max(glm::vec3 bbox_max) { this->bbox_max = bbox_max; }
+    void set_model(glm::mat4 model) { this->model = model; }
 
     // UPDATES:
     void update_model(glm::mat4 op) { this->model = this->model * op; }

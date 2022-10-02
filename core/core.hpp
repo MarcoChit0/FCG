@@ -68,11 +68,13 @@ GLuint LoadShader_Fragment(const char* filename);
 void LoadShader(const char* filename, GLuint shader_id);
 GLuint CreateGpuProgram(GLuint vertex_shader_id, GLuint fragment_shader_id);
 void PrintObjModelInfo(ObjectModel*); 
-// void create_geometric_object(std::string path);
-// void create_geometric_objects(std::vector<std::string> paths);
 void load_texture_images(std::vector<std::string> paths);
 glm::mat4 create_view_matrix();
 glm::mat4 create_projection_matrix();
 void game_logic();
+// Curvas de Bezier
+glm::vec4 curva_Bezier(int n, glm::vec4 pontos_controle[], float t);
+float Bernstein(int n, int k, float t);
+int fac(int n);
 
 #endif
