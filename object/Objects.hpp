@@ -27,7 +27,7 @@ void draw_objects();
 void create_geometric_objects();
 void player_shoot();
 void new_object_being_added_to_virtual_screen(ObjectModelMatrix* obj);
-void ufo_throws_asteroid(float current_time);
+void ufo_throws_asteroid();
 
 Player* player = new Player(PLAYER_ID, "player", Matrix_Translate(0.0f,0.0f,2.0f)*Matrix_Scale(0.1f, 0.1f, 0.1f));
 UFO* ufo = new UFO(UFO_ID, "ufo", Matrix_Translate(0.0f, 0.0f, -2.0f)*Matrix_Scale(0.1f, 0.1f, 0.1f));

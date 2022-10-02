@@ -174,7 +174,6 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mod)
     {
         cow->rotate_x();
     }
-
     if (key == GLFW_KEY_Y && action == GLFW_PRESS)
     {
         cow->rotate_y();
@@ -194,6 +193,26 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mod)
         player_shoot();
     }
 
+    // free camera:
+    if (using_free_camera && key == GLFW_KEY_RIGHT && action == GLFW_PRESS){
+        camera_position_c += (camera_vector_u * CAMERA_SPEED * delta_t);
+        cout << "\n\nDIREITA: "<<to_string(camera_position_c)<< "\n\n";
+    }
+    if (using_free_camera && key == GLFW_KEY_LEFT && action == GLFW_PRESS){
+        camera_position_c -= (camera_vector_u * CAMERA_SPEED * delta_t);
+        cout << "\n\nESQUERDA: "<<to_string(camera_position_c)<< "\n\n";
+    }
+    if (using_free_camera && key == GLFW_KEY_UP && action == GLFW_PRESS){
+        camera_position_c -= (camera_vector_w * CAMERA_SPEED * delta_t);
+        cout << "\n\nCIMA: "<<to_string(camera_position_c)<< "\n\n";
+    }
+    if (using_free_camera && key == GLFW_KEY_DOWN && action == GLFW_PRESS){
+        camera_position_c += (camera_vector_w * CAMERA_SPEED * delta_t);
+        cout << "\n\nBAIXO: "<<to_string(camera_position_c)<< "\n\n";
+    }
+    if (key == GLFW_KEY_C && action == GLFW_PRESS){
+        using_free_camera = !using_free_camera;
+    }
     // Se o usuário apertar a tecla P, utilizamos projeção perspectiva.
     if (key == GLFW_KEY_P && action == GLFW_PRESS)
     {

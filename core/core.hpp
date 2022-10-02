@@ -22,6 +22,7 @@
 
 #define NEARPLANE  -0.1f
 #define FARPLANE  -10.0f
+#define CAMERA_SPEED 10.0f
 
 bool player_lost_the_game_by_being_killed = false;
 bool player_lost_the_game_killing_the_little_cow = false;
@@ -38,6 +39,18 @@ GLint projection_uniform;
 GLint object_id_uniform;
 GLint bbox_min_uniform;
 GLint bbox_max_uniform;
+
+// Variáveis utilizadas para look-at camera
+glm::vec4 camera_lookat_l = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f); 
+// Variáveis utilizadas para free camera
+glm::vec4 camera_vector_w;
+glm::vec4 camera_vector_u;
+glm::vec4 camera_up_vector = glm::vec4(0.0f,1.0f,0.0f,0.0f);
+glm::vec4 camera_position_c = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+glm::vec4 camera_view_vector;
+float prev_time = glfwGetTime();
+float delta_t;
+bool using_free_camera = false;
 
 // Número de texturas carregadas pela função LoadTextureImage()
 GLuint g_NumLoadedTextures = 0;
@@ -76,5 +89,6 @@ void game_logic();
 glm::vec4 curva_Bezier(int n, glm::vec4 pontos_controle[], float t);
 float Bernstein(int n, int k, float t);
 int fac(int n);
+void free_camera();
 
 #endif

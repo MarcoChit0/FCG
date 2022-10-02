@@ -39,7 +39,8 @@ void player_shoot(){
     }
 }
 
-void ufo_throws_asteroid(float current_time){
+void ufo_throws_asteroid(){
+    float current_time = glfwGetTime();
     if (current_time>=(time_last_asteroid_created+COOLDOWN_ASTEROID_TIME)){
         number_of_asteroids += 1;
         Asteroid* a = new Asteroid(ASTEROID_ID, "asteroid", ufo->get_model()*ADJUST_ASTEROID_SIZE);

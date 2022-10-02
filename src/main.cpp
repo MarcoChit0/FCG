@@ -103,8 +103,6 @@ GLFWwindow *initialize(int argc, char *argv[])
 // Realiza as operações de rendeziração
 void frame(GLFWwindow *window)
 {
-    float current_time = glfwGetTime();
-
     // Definimos a cor do "fundo" do framebuffer como branco. 
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
@@ -115,6 +113,12 @@ void frame(GLFWwindow *window)
     // Pedimos para a GPU utilizar o programa de GPU criado acima (contendo os shaders de vértice e fragmentos).
     glUseProgram(program_id);
 
+    if(using_free_camera){
+        free_camera();
+    }
+    else{
+        lookat_camera();
+    }
     glm::mat4 view = create_view_matrix();
     glm::mat4 projection = create_projection_matrix();
 
@@ -122,7 +126,7 @@ void frame(GLFWwindow *window)
     glUniformMatrix4fv(view_uniform, 1, GL_FALSE, glm::value_ptr(view));
     glUniformMatrix4fv(projection_uniform, 1, GL_FALSE, glm::value_ptr(projection));
 
-    ufo_throws_asteroid(current_time);
+    ufo_throws_asteroid();
     draw_objects();
     collision_handler();
     game_logic();
