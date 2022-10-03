@@ -695,6 +695,7 @@ glm::mat4 create_view_matrix()
     return Matrix_Camera_View(camera_position_c, camera_view_vector, camera_up_vector);
 }
 void lookat_camera(){
+    camera_lookat_l = Matrix_Translate(0.0f, 0.0f, -0.5f)* player->get_model() * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
     // Computamos a posição da câmera utilizando coordenadas esféricas.
     float r = g_CameraDistance;
     float y = r * sin(g_CameraPhi);

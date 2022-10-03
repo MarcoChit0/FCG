@@ -46,6 +46,12 @@ class Player : public ComplexObjectModelMatrix
         void move_left(){
             this->movement.push_back(Matrix_Translate(-this->speed, 0.0f, 0.0f));
         }
+        void move_up(){
+            this->movement.push_back(Matrix_Translate(0.0f, this->speed, 0.0f));
+        }
+        void move_down(){
+            this->movement.push_back(Matrix_Translate(0.0f, -this->speed, 0.0f));
+        }
         void draw(){
             if (this->movement.size() > 0){
                 glm::mat4 movement = this->movement[this->movement.size()-1];
