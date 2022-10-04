@@ -1,6 +1,6 @@
 # Blender v2.79 (sub 0) OBJ File: 'MLRS_Rocket.blend'
 # www.blender.org
-mtllib MLRS_Rocket.mtl
+mtllib ../../data/missile/MLRS_Rocket.mtl
 o MLRS_Rocket_Cylinder
 v 0.000000 -1.435358 -0.280000
 v 0.000000 3.564642 -0.280000
