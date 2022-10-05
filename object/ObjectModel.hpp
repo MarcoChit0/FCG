@@ -12,13 +12,15 @@ struct ObjectModel
     std::vector<tinyobj::shape_t>     shapes;
     std::vector<tinyobj::material_t>  materials;
 
-    ObjectModel(std::string filename, const char* basepath = NULL, bool triangulate = true)
+    ObjectModel(std::string filename, const char* mtl_basepath = NULL, bool triangulate = true)
     {
         std::cout << "Carregando modelo: " << filename << std::endl;
         const char* c_filename = filename.c_str();
 
+        const char *mtl_basepath2 = "../../data/mtls/";
+
         std::string err;
-        bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &err, c_filename, basepath, triangulate);
+        bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &err, c_filename, mtl_basepath2, triangulate);
 
         if (!err.empty())
             fprintf(stderr, "\n%s\n", err.c_str());

@@ -4,6 +4,7 @@
 // Constrói triângulos para futura renderização a partir de um ObjectModel.
 void BuildTrianglesAndAddToVirtualScene(ObjectModel* model)
 {
+    //PrintObjModelInfo(model);
     GLuint vertex_array_object_id;
     glGenVertexArrays(1, &vertex_array_object_id);
     glBindVertexArray(vertex_array_object_id);
@@ -79,9 +80,15 @@ void BuildTrianglesAndAddToVirtualScene(ObjectModel* model)
         theobject.num_indices    = last_index - first_index + 1; // Número de indices
         theobject.rendering_mode = GL_TRIANGLES;       // Índices correspondem ao tipo de rasterização GL_TRIANGLES.
         theobject.vertex_array_object_id = vertex_array_object_id;
+        cout << "Object Name: " << theobject.name << "\t" << "ID: " << theobject.vertex_array_object_id << "\n";
 
         theobject.bbox_min = bbox_min;
         theobject.bbox_max = bbox_max;
+
+        //trying to add tinyobj materials to the virtualscene
+/*         if((int)shape < (int)model->materials.size()) {
+            theobject.material = model->materials[shape];
+        } */
 
         g_VirtualScene[model->shapes[shape].name] = theobject;
     }
@@ -168,6 +175,7 @@ void DrawVirtualObject(const char* object_name)
     // vértices apontados pelo VAO criado pela função BuildTrianglesAndAddToVirtualScene(). Veja
     // comentários detalhados dentro da definição de BuildTrianglesAndAddToVirtualScene().
     glBindVertexArray(g_VirtualScene[object_name].vertex_array_object_id);
+    //std::cout << g_VirtualScene[object_name].vertex_array_object_id << "\n";
 
     // Setamos as variáveis "bbox_min" e "bbox_max" do fragment shader
     // com os parâmetros da axis-aligned bounding box (AABB) do modelo.
@@ -235,12 +243,16 @@ void LoadShadersFromFiles()
     object_id_uniform       = glGetUniformLocation(program_id, "object_id"); // Variável "object_id" em shader_fragment.glsl
     bbox_min_uniform        = glGetUniformLocation(program_id, "bbox_min");
     bbox_max_uniform        = glGetUniformLocation(program_id, "bbox_max");
+    material_name_uniform   = glGetUniformLocation(program_id, "material_name_uniform");
 
     // Variáveis em "shader_fragment.glsl" para acesso das imagens de textura
     glUseProgram(program_id);
     glUniform1i(glGetUniformLocation(program_id, "TextureImage0"), 0);
     glUniform1i(glGetUniformLocation(program_id, "TextureImage1"), 1);
     glUniform1i(glGetUniformLocation(program_id, "TextureImage2"), 2);
+    glUniform1i(glGetUniformLocation(program_id, "TextureImage3"), 3);
+
+
     glUseProgram(0);
 }
 

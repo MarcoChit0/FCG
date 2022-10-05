@@ -39,6 +39,7 @@ GLint projection_uniform;
 GLint object_id_uniform;
 GLint bbox_min_uniform;
 GLint bbox_max_uniform;
+GLint material_name_uniform;
 
 // Variáveis utilizadas para look-at camera
 glm::vec4 camera_lookat_l = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f); 
@@ -63,8 +64,10 @@ std::stack<glm::mat4>  g_MatrixStack;
 
 // Vetor que armazena os caminhos das imagens de textura.
 std::vector<std::string> texture_images= {
-    "../../data/tc-earth_daymap_surface.jpg",
-    "../../data/tc-earth_nightmap_citylights.gif"
+    "../../data/ufo/Textures/UFO_Metal_BaseColor.png",
+    "../../data//ufo/Textures/UFO_Metal_Roughness.png",
+    "../../data//ufo/Textures/UFO_Metal_Metallic.png",
+    "../../data/tc-earth_daymap_surface.jpg"
 };
 
 // Declaração de funções utilizadas para pilha de matrizes de modelagem.

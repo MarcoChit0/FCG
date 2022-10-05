@@ -4,6 +4,7 @@
 #include <string>
 #include <glad/glad.h>
 #include <glm/mat4x4.hpp>
+//#include <tiny_obj_loader.h>
 
 // Estrutura responsável por salvar os dados do objeto renderizado.
 struct SceneObject
@@ -15,6 +16,7 @@ struct SceneObject
     GLuint       vertex_array_object_id; // ID do VAO onde estão armazenados os atributos do modelo
     glm::vec3    bbox_min; // Axis-Aligned Bounding Box do objeto
     glm::vec3    bbox_max;
+    tinyobj::material_t material;
 };
 
 #endif

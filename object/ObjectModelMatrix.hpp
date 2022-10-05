@@ -19,6 +19,8 @@ using namespace std;
 
 vector <string> tokenize(string line, char delim=' ');
 
+map<string, int> names_to_id = {{"UFO_Glass", 1}, {"UFO_Metal", 2}};
+
 // Estrutura responsável por controlar a posição dos objetos.
 class ObjectModelMatrix
 {
@@ -73,7 +75,7 @@ public:
         this->apply_transform();
         model = this->model;
         glUniformMatrix4fv(model_uniform, 1, GL_FALSE, glm::value_ptr(model));
-        glUniform1i(object_id_uniform, this->id);
+        glUniform1i(object_id_uniform, names_to_id[this->get_name()]);
         DrawVirtualObject(this->name.c_str());
     }
 
@@ -158,7 +160,9 @@ class ComplexObjectModelMatrix : public ObjectModelMatrix
             for(unsigned long i=0; i < this->objs_names.size();i++){
                 glm::mat4 model = this->get_model();
                 glUniformMatrix4fv(model_uniform, 1, GL_FALSE, glm::value_ptr(model));
-                glUniform1i(object_id_uniform, this->get_id());
+                //std::cout << g_VirtualScene[this->objs_names[i].c_str()].name << " " << names_to_id[g_VirtualScene[this->objs_names[i].c_str()].name] << "\n";
+                glUniform1i(material_name_uniform, names_to_id[g_VirtualScene[this->objs_names[i].c_str()].name]);
+                glUniform1i(object_id_uniform, names_to_id[this->get_name()]);
                 DrawVirtualObject(this->objs_names[i].c_str());
             }
         }

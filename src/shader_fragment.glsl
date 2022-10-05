@@ -30,17 +30,33 @@ uniform int object_id;
 uniform vec4 bbox_min;
 uniform vec4 bbox_max;
 
+// Id referente ao material utilizado
+uniform int material_name_uniform;
+
 // Variáveis para acesso das imagens de textura
 uniform sampler2D TextureImage0;
 uniform sampler2D TextureImage1;
 uniform sampler2D TextureImage2;
+uniform sampler2D TextureImage3;
 
 // O valor de saída ("out") de um Fragment Shader é a cor final do fragmento.
-out vec4 color;
+out vec3 color;
 
 // Constantes
 #define M_PI   3.14159265358979323846
 #define M_PI_2 1.57079632679489661923
+
+vec3 get_ilummination(vec3 Kd0, vec3 Ka, vec3 Ks, vec3 I, vec3 Ia, float q, vec4 n, vec4 h, vec4 l) {   
+    vec3 lambert_diffuse, ambient, blinnPhong;
+    // Equação de Iluminação
+    lambert_diffuse = Kd0 * I * max(0,dot(n,l));
+
+    ambient = Ka * Ia;
+    //vec3 phong = Ks * I * pow(max(0, dot(r, v)), q);
+    blinnPhong = Ks * I * pow(max(0, dot(n, h)), q);
+
+    return lambert_diffuse + ambient + blinnPhong;
+}
 
 void main()
 {
@@ -60,9 +76,7 @@ void main()
     // normais de cada vértice.
     vec4 n = normalize(normal);
 
-    // Vetor que define o sentido da fonte de luz em relação ao ponto atual.
-    vec4 l = normalize(vec4(1.0,1.0,0.0,0.0));
-
+    
     // Vetor que define o sentido da câmera em relação ao ponto atual.
     vec4 v = normalize(camera_position - p);
 
@@ -70,58 +84,81 @@ void main()
     float U = 0.0;
     float V = 0.0;
 
-    if (object_id == PLAYER_ID)
-    {
-        float minx = bbox_min.x;
-        float maxx = bbox_max.x;
 
-        float miny = bbox_min.y;
-        float maxy = bbox_max.y;
+     /* Iluminação */
 
-        float minz = bbox_min.z;
-        float maxz = bbox_max.z;
+    /* Espectro da fonte de iluminação */
+    vec3 I = vec3(1.0, 1.0, 1.0);
+    /* Espectro da luz ambiente */
+    vec3 Ia = vec3(0.6, 0.6, 0.6);
+
+    vec4 lightPos = vec4(0.0, 100.0, 1.0, 1.0);
+    vec4 lightDir = vec4(0.0, -1.0, 0.0, 0.0);
+    vec4 l = normalize(lightPos - p);
+    vec4 r = normalize(-l + 2*n*(dot(n, l)));
+
+
+    //Vetor usado para iluminação de Blinn-Phong
+    vec4 h = normalize(l + v);
+
+
+    vec3 Kd0, Image_Kd, Image_Ns, Image_Mettalic,
+         Ks, Ka, lambert_diffuse, ambient, blinnPhong, diffuse, specular;
+
+    //check in ObjectModelMatrix.hpp the ids
+
+    //object_id == 2 UFO_metal
+    if(material_name_uniform == 2) {
+        U = texcoords.x;
+        V = texcoords.y;
+
         
-        U = 0.0;
-        V = 0.0;
-    }
-    else if (object_id == MISSILE_ID)
-    {
-        float minx = bbox_min.x;
-        float maxx = bbox_max.x;
+        Image_Kd = texture(TextureImage0, vec2(U,V)).rgb;
+        Image_Ns = texture(TextureImage1, vec2(U,V)).rgb;
+        Image_Mettalic = texture(TextureImage1, vec2(U,V)).rgb;
 
-        float miny = bbox_min.y;
-        float maxy = bbox_max.y;
 
-        float minz = bbox_min.z;
-        float maxz = bbox_max.z;
+        Ks = vec3(0.15, 0.15, 0.15);
+        Ka = vec3(0.5, 0.5, 0.5);
+
+        diffuse = Image_Kd * I * max(0,dot(n,l));
+        ambient = Ka * Ia;
+        specular = Ks * I * pow(max(0, dot(n, h)), 20.0);
+    
+        color = diffuse + ambient + specular;
+        color += Image_Mettalic *0.1;
+
+    } else {
+        vec4 bbox_center = (bbox_min + bbox_max) / 2.0;
+
+        float rho = length(position_model - bbox_center);
+        float theta = atan(position_model.x, position_model.z);
+        float phi = asin(position_model.y / rho);
+
+        U = (theta + M_PI) / (2 * M_PI);
+        V = (phi + M_PI_2) / M_PI;
+
+
+        Kd0 = texture(TextureImage3, vec2(U,V)).rgb;
         
-        U = 0.0;
-        V = 0.0;
+        float q = 20.0;
+
+        /* Refletancia especular */
+        Ks = vec3(0.2, 0.2, 0.3);
+        /* Refletancia ambiente */
+        Ka = vec3(0.4, 0.4, 0.4);
+
+        // Equação de Iluminação
+        lambert_diffuse = Kd0 * I * max(0,dot(n,l));
+        ambient = Ka * Ia;
+        blinnPhong = Ks * I * pow(max(0, dot(n, h)), q);
+
+        color = lambert_diffuse + ambient + blinnPhong;
+
+        
+        color = pow(color, vec3(1.0,1.0,1.0)/1.2);
     }
-    // Obtemos a refletância difusa a partir da leitura da imagem TextureImage0
-    vec3 Kd0 = texture(TextureImage0, vec2(U,V)).rgb;
-
-    // Equação de Iluminação
-    float lambert = max(0,dot(n,l));
-
-    color.rgb = Kd0 * (lambert + 0.01);
-
-    // NOTE: Se você quiser fazer o rendering de objetos transparentes, é
-    // necessário:
-    // 1) Habilitar a operação de "blending" de OpenGL logo antes de realizar o
-    //    desenho dos objetos transparentes, com os comandos abaixo no código C++:
-    //      glEnable(GL_BLEND);
-    //      glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    // 2) Realizar o desenho de todos objetos transparentes *após* ter desenhado
-    //    todos os objetos opacos; e
-    // 3) Realizar o desenho de objetos transparentes ordenados de acordo com
-    //    suas distâncias para a câmera (desenhando primeiro objetos
-    //    transparentes que estão mais longe da câmera).
-    // Alpha default = 1 = 100% opaco = 0% transparente
-    color.a = 1;
-
-    // Cor final com correção gamma, considerando monitor sRGB.
-    // Veja https://en.wikipedia.org/w/index.php?title=Gamma_correction&oldid=751281772#Windows.2C_Mac.2C_sRGB_and_TV.2Fvideo_standard_gammas
-    color.rgb = pow(color.rgb, vec3(1.0,1.0,1.0)/2.2);
+   
+    
 } 
 
