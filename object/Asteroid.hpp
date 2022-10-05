@@ -34,30 +34,14 @@ class Asteroid : public ComplexObjectModelMatrix
     void draw(){
         ComplexObjectModelMatrix::draw();
     }
+    void apply_transform(){        
+        glm::vec4 translacoes = this->get_model()[3];
+        // sair do ponto atual e ir ao ponto de spawn do objeto
+        this->update_model(Matrix_Translate(-translacoes.x + spawn_point.x, -translacoes.y + spawn_point.y, -translacoes.z + spawn_point.z));
+        // aplicar rotação no eixo x do objeto
+        this->update_model(Matrix_Rotate_X(3.1415/16));
+        // retornar ao ponto atual com deslocamento no eixo z (movimento em direção ao player)
+        this->update_model(Matrix_Translate(translacoes.x - spawn_point.x, translacoes.y - spawn_point.y, (translacoes.z + 0.2f) - spawn_point.z));
+    }
 };
-    // void go_backward_with_rotation(){
-    //     this->set_transform({Matrix_Rotate_X(3.1415/64), Matrix_Rotate_Y(3.1415/96), Matrix_Rotate_Z(3.1415/128), BACKWARD_TRANSFORMATION});
-    // }
-    // void apply_transform(){        
-    //     // backward movement:
-    //     this->update_model(this->get_transform()[this->get_transform().size() - 1]);
-    //     // rotations:
-    //     cout << "\n\n######################\n\n";
-    //     if (this->get_transform().size()>1){                
-    //         glm::vec4 quarta_coluna = this->get_model()[3];
-    //         float x_translation = this->get_model()[3].x;
-    //         float y_translation = this->get_model()[3].y;
-    //         float z_translation = this->get_model()[3].z;
-    //         this->update_model(Matrix_Translate(- x_translation,- y_translation,- z_translation));
-
-    //         for(unsigned long i = 1; i < this->get_transform().size(); i ++){
-    //             this->update_model(this->get_transform()[this->get_transform().size() - (i+1)]);
-    //         }
-    //         this->update_model(Matrix_Translate(x_translation,y_translation,z_translation));
-    //         glm::vec4 primeira_coluna = this->get_model()[0];
-    //         glm::vec4 segunda_coluna = this->get_model()[1];
-    //         glm::vec4 terceira_coluna = this->get_model()[2];
-    //         this->set_model(glm::mat4(primeira_coluna, segunda_coluna, terceira_coluna, quarta_coluna));
-    //     }
-    // }
 #endif
