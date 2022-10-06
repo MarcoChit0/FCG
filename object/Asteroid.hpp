@@ -4,7 +4,9 @@
 #include "ObjectModelMatrix.hpp"
 #define ASTEROID_OBJ_PATH "../../data/asteroid/A2.obj"
 #define ADJUST_ASTEROID_SIZE Matrix_Scale(2.0f, 2.0f, 2.0f)
-#define BACKWARD_SPEED 5.0f
+#define TRANSLATION_SPEED 2.5f
+#define ROTATION_SPEEED 5.0F
+#define ROTATION_DEGREE 3.1415/16
 
 class Asteroid : public ComplexObjectModelMatrix
 {
@@ -28,7 +30,8 @@ class Asteroid : public ComplexObjectModelMatrix
         this->spawn_point = glm::vec4(x,y,z, 1.0f);
     }
     void draw(){
-        this->update_model(Matrix_Translate(0.0f, 0.0f, BACKWARD_SPEED*delta_t));
+        this->update_model(Matrix_Rotate_X(ROTATION_DEGREE)*ROTATION_SPEED);
+        this->update_model_extrinsic(Matrix_Translate(0.0f, 0.0f, TRANSLATION_SPEED*delta_t));
         for(unsigned long i=0; i < this->get_components().size();i++){
             glm::mat4 model = this->get_model();
             glUniformMatrix4fv(model_uniform, 1, GL_FALSE, glm::value_ptr(model));

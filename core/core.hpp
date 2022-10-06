@@ -68,9 +68,15 @@ std::stack<glm::mat4>  g_MatrixStack;
 // Vetor que armazena os caminhos das imagens de textura.
 std::vector<std::string> texture_images= {
     "../../data/ufo/Textures/UFO_Metal_BaseColor.png",
-    "../../data//ufo/Textures/UFO_Metal_Roughness.png",
-    "../../data//ufo/Textures/UFO_Metal_Metallic.png",
-    "../../data/tc-earth_daymap_surface.jpg"
+    "../../data/ufo/Textures/UFO_Metal_Roughness.png",
+    "../../data/ufo/Textures/UFO_Metal_Metallic.png",
+    "../../data/tc-earth_daymap_surface.jpg",
+    // asteroid textures:
+    "../../data/asteroid/textures/Albedo.jpg",
+    "../../data/asteroid/textures/Displacement.jpg",
+    "../../data/asteroid/textures/Emission.jpg",
+    "../../data/asteroid/textures/Metalness.jpg",
+    "../../data/asteroid/textures/Normal.jpg",
 };
 
 // Declaração de funções utilizadas para pilha de matrizes de modelagem.
