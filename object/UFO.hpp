@@ -62,7 +62,6 @@ public:
 
     glm::mat4 bezier_curves()
     {
-        float current_time = glfwGetTime();
         glm::vec4 pontos_curva;
         float porcentagem_ciclo = current_time / (tempo_ciclo * tempo_delay);
         porcentagem_ciclo = porcentagem_ciclo - floor(porcentagem_ciclo); // [0,1]

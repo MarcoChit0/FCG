@@ -3,7 +3,7 @@
 
 #include "Objects.hpp"
 #include "ObjectModelMatrix.hpp"
-#define SPEED 1.0f
+#define SPEED 50.0f
 #define PLAYER_OBJ_PATH "../../data/player/SmallSpaceFighter.obj"
 #define PLAYER_STARTING_LIFE_POINTS 3
 
@@ -41,16 +41,17 @@ class Player : public ComplexObjectModelMatrix
         }
 
         void move_right(){
-            this->movement.push_back(Matrix_Translate(this->speed,0.0f, 0.0f));
+            this->movement.push_back(Matrix_Translate(this->speed*delta_t,0.0f, 0.0f));
+            cout << endl << endl << this->speed*delta_t << endl << endl;
         }
         void move_left(){
-            this->movement.push_back(Matrix_Translate(-this->speed, 0.0f, 0.0f));
+            this->movement.push_back(Matrix_Translate(-this->speed*delta_t, 0.0f, 0.0f));
         }
         void move_up(){
-            this->movement.push_back(Matrix_Translate(0.0f, this->speed, 0.0f));
+            this->movement.push_back(Matrix_Translate(0.0f, this->speed*delta_t, 0.0f));
         }
         void move_down(){
-            this->movement.push_back(Matrix_Translate(0.0f, -this->speed, 0.0f));
+            this->movement.push_back(Matrix_Translate(0.0f, -this->speed*delta_t, 0.0f));
         }
         void draw(){
             if (this->movement.size() > 0){

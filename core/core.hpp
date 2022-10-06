@@ -49,9 +49,12 @@ glm::vec4 camera_vector_u;
 glm::vec4 camera_up_vector = glm::vec4(0.0f,1.0f,0.0f,0.0f);
 glm::vec4 camera_position_c = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 glm::vec4 camera_view_vector;
-float prev_time = glfwGetTime();
-float delta_t;
 bool using_free_camera = false;
+
+// timer
+float prev_time = glfwGetTime();
+float current_time = glfwGetTime();
+float delta_t;
 
 // Número de texturas carregadas pela função LoadTextureImage()
 GLuint g_NumLoadedTextures = 0;
@@ -93,5 +96,5 @@ glm::vec4 curva_Bezier(int n, glm::vec4 pontos_controle[], float t);
 float Bernstein(int n, int k, float t);
 int fac(int n);
 void free_camera();
-
+void update_timer();
 #endif

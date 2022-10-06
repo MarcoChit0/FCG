@@ -808,9 +808,10 @@ void free_camera(){
         // vetores derivados a partir dos elementos básicos:
         camera_vector_w = (- camera_view_vector) / (norm(camera_view_vector));
         camera_vector_u = crossproduct(camera_up_vector, camera_vector_w) / (norm(crossproduct(camera_up_vector, camera_vector_w)));
+}
 
-        // Atualiza delta de tempo
-        float current_time = (float)glfwGetTime();
-        delta_t = current_time - prev_time;
-        prev_time = current_time;
+void update_timer(){
+    current_time = (float)glfwGetTime();
+    delta_t = current_time - prev_time;
+    prev_time = current_time;
 }
