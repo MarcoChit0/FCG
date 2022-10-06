@@ -36,12 +36,12 @@ class Asteroid : public ComplexObjectModelMatrix
     }
     void apply_transform(){        
         glm::vec4 translacoes = this->get_model()[3];
-        // sair do ponto atual e ir ao ponto de spawn do objeto
-        this->update_model(Matrix_Translate(-translacoes.x + spawn_point.x, -translacoes.y + spawn_point.y, -translacoes.z + spawn_point.z));
-        // aplicar rotação no eixo x do objeto
+        // aplica rotação intrínseca no eixo x do objeto (no seu sistema de
+        // coordenadas local)
         this->update_model(Matrix_Rotate_X(3.1415/16));
-        // retornar ao ponto atual com deslocamento no eixo z (movimento em direção ao player)
-        this->update_model(Matrix_Translate(translacoes.x - spawn_point.x, translacoes.y - spawn_point.y, (translacoes.z + 0.2f) - spawn_point.z));
+        // aplica deslocamento extrínseco no eixo z (movimento em direção ao
+        // player), movimentando o objeto em relação ao seu ponto atual
+        this->update_model_extrinsic(Matrix_Translate(0.0f, 0.0f, 0.2f));
     }
 };
 #endif

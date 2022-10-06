@@ -49,6 +49,7 @@ public:
 
     // UPDATES:
     void update_model(glm::mat4 op) { this->model = this->model * op; }
+    void update_model_extrinsic(glm::mat4 op) { this->model = op * this->model; }
 
     ObjectModelMatrix(int id, string name, glm::mat4 model, string path, vector<glm::mat4> transform){
         this->id = id;
