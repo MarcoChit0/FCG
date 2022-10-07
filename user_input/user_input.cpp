@@ -182,18 +182,18 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mod)
     {
         cow->rotate_z();
     }
-    if (key == GLFW_KEY_A && action == GLFW_PRESS)
+    if (key == GLFW_KEY_LEFT && action == GLFW_PRESS)
     {
         player->move_left();
     }
-    if (key == GLFW_KEY_D && action == GLFW_PRESS){
+    if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS){
         player->move_right();
     }
-    if (key == GLFW_KEY_W && action == GLFW_PRESS)
+    if (key == GLFW_KEY_UP && action == GLFW_PRESS)
     {
         player->move_up();
     }
-    if (key == GLFW_KEY_S && action == GLFW_PRESS){
+    if (key == GLFW_KEY_DOWN && action == GLFW_PRESS){
         player->move_down();
     }
     if (key == GLFW_KEY_ENTER && action == GLFW_PRESS){
@@ -201,21 +201,17 @@ void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mod)
     }
 
     // free camera:
-    if (using_free_camera && key == GLFW_KEY_RIGHT && action == GLFW_PRESS){
+    if (using_free_camera && key == GLFW_KEY_D && action == GLFW_PRESS){
         camera_position_c += (camera_vector_u * CAMERA_SPEED * delta_t);
-        cout << "\n\nDIREITA: "<<to_string(camera_position_c)<< "\n\n";
     }
-    if (using_free_camera && key == GLFW_KEY_LEFT && action == GLFW_PRESS){
+    if (using_free_camera && key == GLFW_KEY_A && action == GLFW_PRESS){
         camera_position_c -= (camera_vector_u * CAMERA_SPEED * delta_t);
-        cout << "\n\nESQUERDA: "<<to_string(camera_position_c)<< "\n\n";
     }
-    if (using_free_camera && key == GLFW_KEY_UP && action == GLFW_PRESS){
+    if (using_free_camera && key == GLFW_KEY_W && action == GLFW_PRESS){
         camera_position_c -= (camera_vector_w * CAMERA_SPEED * delta_t);
-        cout << "\n\nCIMA: "<<to_string(camera_position_c)<< "\n\n";
     }
-    if (using_free_camera && key == GLFW_KEY_DOWN && action == GLFW_PRESS){
+    if (using_free_camera && key == GLFW_KEY_S && action == GLFW_PRESS){
         camera_position_c += (camera_vector_w * CAMERA_SPEED * delta_t);
-        cout << "\n\nBAIXO: "<<to_string(camera_position_c)<< "\n\n";
     }
     if (key == GLFW_KEY_C && action == GLFW_PRESS){
         using_free_camera = !using_free_camera;
