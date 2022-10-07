@@ -1,6 +1,6 @@
 # Blender v2.75 (sub 0) OBJ File: ''
 # www.blender.org
-mtllib SmallSpaceFighter.mtl
+# mtllib SmallSpaceFighter.mtl
 o Small_Space_Fighter_Cube_Small_Space_Fighter
 v 0.947136 -0.125586 0.734320
 v 1.474448 -0.125586 0.735140

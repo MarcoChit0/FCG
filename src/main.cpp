@@ -115,6 +115,8 @@ GLFWwindow *initialize(int argc, char *argv[])
 // Realiza as operações de rendeziração
 void frame(GLFWwindow *window)
 {
+    update_timer();
+
     // Definimos a cor do "fundo" do framebuffer como branco. 
     glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
@@ -180,3 +182,4 @@ void frame(GLFWwindow *window)
     // Verificamos com o sistema operacional se houve alguma interação com o usuário
     glfwPollEvents();
 }
+

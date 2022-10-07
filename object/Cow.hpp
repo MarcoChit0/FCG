@@ -6,6 +6,7 @@
 #define COW_STARTING_LIFE_POINTS 1
 #define BIND_DISTANCE 1.75f
 #define ROTATION_DEGREE (3.1415/16)
+#define ROTATION_SPEED 10.0F
 #define COW_BINDED_TO_UFO_MATRIX Matrix_Translate(0.0f, -BIND_DISTANCE, 0.0f)
 
 class Cow : public ObjectModelMatrix
@@ -34,13 +35,13 @@ class Cow : public ObjectModelMatrix
         this->set_model(ufo_model*COW_BINDED_TO_UFO_MATRIX);
     }
     void rotate_x(){
-        this->movement.push_back(Matrix_Rotate_X(ROTATION_DEGREE));
+        this->movement.push_back(Matrix_Rotate_X(ROTATION_DEGREE)*delta_t*ROTATION_SPEED);
     }
     void rotate_y(){
-        this->movement.push_back(Matrix_Rotate_Y(ROTATION_DEGREE));
+        this->movement.push_back(Matrix_Rotate_Y(ROTATION_DEGREE)*delta_t*ROTATION_SPEED);
     }
     void rotate_z(){
-        this->movement.push_back(Matrix_Rotate_Z(ROTATION_DEGREE));
+        this->movement.push_back(Matrix_Rotate_Z(ROTATION_DEGREE)*delta_t*ROTATION_SPEED);
     }
     void draw(){
         if (this->movement.size() > 0){
