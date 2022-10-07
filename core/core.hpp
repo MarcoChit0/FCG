@@ -88,17 +88,18 @@ std::vector<std::string> texture_images= {
     // missile textures:
     "../../data/missile/textures/MLRS_Rocket_MLRS_Rocket_Mat_BaseColor.png",
     // player textures
-    "../../data/player/textures/metallic.png"
+    "../../data/player/textures/metallic.png",
+
 };
 
 std::vector<std::string> cube_map_faces = 
 {
-    "/home/bervig/Documents/UFRGS/Quinto Semestre/Fundamentos de Computação Gráfica/FCG/data/skybox/right.png",
-    "/home/bervig/Documents/UFRGS/Quinto Semestre/Fundamentos de Computação Gráfica/FCG/data/skybox/left.png",
-    "/home/bervig/Documents/UFRGS/Quinto Semestre/Fundamentos de Computação Gráfica/FCG/data/skybox/top.png",
-    "/home/bervig/Documents/UFRGS/Quinto Semestre/Fundamentos de Computação Gráfica/FCG/data/skybox/bottom.png",
-    "/home/bervig/Documents/UFRGS/Quinto Semestre/Fundamentos de Computação Gráfica/FCG/data/skybox/front.png",
-    "/home/bervig/Documents/UFRGS/Quinto Semestre/Fundamentos de Computação Gráfica/FCG/data/skybox/back.png"
+    "../../data/skybox/right.png",
+    "../../data/skybox/left.png",
+    "../../data/skybox/top.png",
+    "../../data/skybox/bottom.png",
+    "../../data/skybox/front.png",
+    "../../data/skybox/back.png"
 };
 
 float skyboxVertices[] = {

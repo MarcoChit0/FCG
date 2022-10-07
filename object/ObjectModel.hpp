@@ -17,7 +17,7 @@ struct ObjectModel
         std::cout << "Carregando modelo: " << filename << std::endl;
         const char* c_filename = filename.c_str();
 
-        const char *mtl_basepath2 = "/home/bervig/Documents/UFRGS/Quinto Semestre/Fundamentos de Computação Gráfica/FCG/data/mtls";
+        const char *mtl_basepath2 = "../../data/mtls/";
 
         std::string err;
         bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &err, c_filename, mtl_basepath2, triangulate);

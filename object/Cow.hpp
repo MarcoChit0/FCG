@@ -7,21 +7,21 @@
 #define BIND_DISTANCE 1.75f
 #define ROTATION_DEGREE (3.1415/16)
 #define ROTATION_SPEED 10.0F
-#define COW_BINDED_TO_UFO_MATRIX Matrix_Translate(0.0f, -BIND_DISTANCE, 0.0f)
+#define COW_BINDED_TO_UFO_MATRIX Matrix_Translate(0.0f, -BIND_DISTANCE, 0.0f) * Matrix_Scale(0.25f, 0.25f, 0.25f)
 
-class Cow : public ObjectModelMatrix
+class Cow : public ComplexObjectModelMatrix
 {
     private:
     int life_points;
     vector<glm::mat4> movement;
     public:
     Cow(int id, string name, glm::mat4 model, vector<glm::mat4> transform):
-    ObjectModelMatrix(id, name, model, COW_OBJ_PATH, transform)
+    ComplexObjectModelMatrix(id, name, model, COW_OBJ_PATH, transform)
     {
         this->life_points = COW_STARTING_LIFE_POINTS;
     }
     Cow(int id, string name, glm::mat4 model):
-    ObjectModelMatrix(id, name, model, COW_OBJ_PATH)
+    ComplexObjectModelMatrix(id, name, model, COW_OBJ_PATH)
     {
         this->life_points = COW_STARTING_LIFE_POINTS;
     }
@@ -49,7 +49,7 @@ class Cow : public ObjectModelMatrix
                 this->update_model(this->movement[this->movement.size()-(i+1)]);
             }                
         }
-        ObjectModelMatrix::draw();
+        ComplexObjectModelMatrix::draw();
     }
 };
 

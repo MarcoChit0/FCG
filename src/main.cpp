@@ -75,10 +75,10 @@ GLFWwindow *initialize(int argc, char *argv[])
     // Carregamos os shaders de vértices e de fragmentos
     LoadShadersFromFiles();
 
-    skyboxshader = new Shader("/home/bervig/Documents/UFRGS/Quinto Semestre/Fundamentos de Computação Gráfica/FCG/src/skybox_vertex.vs", 
-                               "/home/bervig/Documents/UFRGS/Quinto Semestre/Fundamentos de Computação Gráfica/FCG/src/skybox_fragment.fs");  
+    skyboxshader = new Shader("/home/macsilva/Desktop/ufrgs/cadeiras/2022/01/fcg/trabalho_final/FCG/src/skybox_vertex.vs",
+     "/home/macsilva/Desktop/ufrgs/cadeiras/2022/01/fcg/trabalho_final/FCG/src/skybox_fragment.fs");  
    
-    //load_texture_images(texture_images);
+    load_texture_images(texture_images);
     cubemapTexture = loadCubemap(cube_map_faces);
     
     glGenVertexArrays(1, &skyboxVAO);

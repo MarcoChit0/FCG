@@ -38,7 +38,6 @@ uniform sampler2D TextureImage0;
 uniform sampler2D TextureImage1;
 uniform sampler2D TextureImage2;
 uniform sampler2D TextureImage3;
-uniform sampler2D TextureImage4;
 
 // ASTEROID TEXTURES:
 uniform sampler2D TextureImage4;
@@ -157,7 +156,7 @@ void main()
     }
 
     /* UFO_Metal -- for more information, check ObjectModelMatrix.names_to_id */
-    if(material_name_uniform == 2) {
+    else if(material_name_uniform == 2) {
         U = texcoords.x;
         V = texcoords.y;
 
@@ -178,7 +177,7 @@ void main()
     }
 
     /* asteroid -- for more information, check ObjectModelMatrix.names_to_id */
-    if(material_name_uniform == 3)   
+    else if(material_name_uniform == 3)   
     {
         U = texcoords.x;
         V = texcoords.y;
@@ -200,25 +199,32 @@ void main()
     }
 
     /* cow -- for more information, check ObjectModelMatrix.names_to_id */
-    if(material_name_uniform == 4){
-        U = texcoords.x;
-        V = texcoords.y;
+    else if(material_name_uniform == 4){
+        float minx = bbox_min.x;
+        float maxx = bbox_max.x;
+
+        float miny = bbox_min.y;
+        float maxy = bbox_max.y;
+
+        float minz = bbox_min.z;
+        float maxz = bbox_max.z;
+
+        U = (position_model.x - minx)/(maxx - minx);
+        V = (position_model.y - miny)/(maxy - miny);
         
+        U = U - floor(U);
+        V = V - floor(V);
+
         // refletância difusa apenas
         Image_Kd = texture(TextureImage9, vec2(U, V)).rgb;
-        Ks = vec3(0.1,0.1,0.1);
-        Ka = vec3(0.4,0.4,0.4);
-        float q = 20.0;
 
         diffuse = Image_Kd * I * (max(0,dot(n,l)) + 0.01);
-        ambient = Ka * Ia;
-        specular = Ks * I * pow(max(0, dot(n, h)), q);
 
-        color.rgb = diffuse + ambient + specular;
+        color.rgb = diffuse;
     }
 
     /* missile -- for more information, check ObjectModelMatrix.names_to_id */
-    if(material_name_uniform == 5){
+    else if(material_name_uniform == 5){
         U = texcoords.x;
         V = texcoords.y;
         
@@ -239,33 +245,68 @@ void main()
     }
 
     /* player -- for more information, check ObjectModelMatrix.names_to_id */
-    if (material_name_uniform == 6){
-        float minx = bbox_min.x;
-        float maxx = bbox_max.x;
+    else if (material_name_uniform == 6 || material_name_uniform == 7 || material_name_uniform == 8 || material_name_uniform == 9){
+        // float minx = bbox_min.x;
+        // float maxx = bbox_max.x;
 
-        float miny = bbox_min.y;
-        float maxy = bbox_max.y;
+        // float miny = bbox_min.y;
+        // float maxy = bbox_max.y;
 
-        float minz = bbox_min.z;
-        float maxz = bbox_max.z;
+        // float minz = bbox_min.z;
+        // float maxz = bbox_max.z;
 
-        U = (position_model.x - minx)/(maxx - minx);
-        V = (position_model.y - miny)/(maxy - miny);
-    
+        // U = (position_model.x - minx)/(maxx - minx);
+        // V = (position_model.y - miny)/(maxy - miny);
+        U = texcoords.x;
+        V = texcoords.y;
+
         // refletância ambiente
-        Ks = vec3(1.0,1.0,1.0);
+        Ks = vec3(0.9,0.9,0.9);
         // refletância especular
         Ka = vec3(0.5, 0.5, 0.5);
         // expoente expecular
         float q = 20.0;
         // refletância difusa
-        Image_Kd = texture(TextureImage10, vec2(U, V)).rgb;
+        Image_Kd = texture(TextureImage11, vec2(U, V)).rgb;
 
         diffuse = Image_Kd * I * (max(0,dot(n,l)) + 0.01);
         ambient = Ka * Ia;
         specular = Ks * I * pow(max(0, dot(n, h)), q);
 
         color.rgb = diffuse + ambient + specular;    
-    } 
+    }
+    /* cow -- for more information, check ObjectModelMatrix.names_to_id */
+    else if(
+        material_name_uniform == 10 
+        || material_name_uniform == 11
+        || material_name_uniform == 12
+        || material_name_uniform == 13
+        || material_name_uniform == 14
+        ){
+            float minx = bbox_min.x;
+            float maxx = bbox_max.x;
+    
+            float miny = bbox_min.y;
+            float maxy = bbox_max.y;
+    
+            float minz = bbox_min.z;
+            float maxz = bbox_max.z;
+    
+            U = (position_model.x - minx)/(maxx - minx);
+            V = (position_model.y - miny)/(maxy - miny);
+            
+            U = U - floor(U);
+            V = V - floor(V);
+    
+            // refletância difusa apenas
+            Image_Kd = texture(TextureImage9, vec2(U, V)).rgb;
+    
+            diffuse = Image_Kd * I * (max(0,dot(n,l)) + 0.01);
+    
+            color.rgb = diffuse;
+    }
+    else{
+        color.rgb = vec3(1.0, 1.0, 1.0);
+    }
 }
 
