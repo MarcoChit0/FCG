@@ -77,6 +77,12 @@ std::vector<std::string> texture_images= {
     "../../data/asteroid/textures/Emission.jpg",
     "../../data/asteroid/textures/Metalness.jpg",
     "../../data/asteroid/textures/Normal.jpg",
+    // cow texrures:
+    "../../data/cow/textures/cow_texture.png",
+    // missile textures:
+    "../../data/missile/textures/MLRS_Rocket_MLRS_Rocket_Mat_BaseColor.png",
+    // player textures
+    "../../data/player/textures/metallic.png"
 };
 
 // Declaração de funções utilizadas para pilha de matrizes de modelagem.

@@ -256,6 +256,9 @@ void LoadShadersFromFiles()
     glUniform1i(glGetUniformLocation(program_id, "TextureImage6"), 6);
     glUniform1i(glGetUniformLocation(program_id, "TextureImage7"), 7);
     glUniform1i(glGetUniformLocation(program_id, "TextureImage8"), 8);
+    glUniform1i(glGetUniformLocation(program_id, "TextureImage9"), 9);
+    glUniform1i(glGetUniformLocation(program_id, "TextureImage10"), 10);
+    glUniform1i(glGetUniformLocation(program_id, "TextureImage11"), 11);
 
     glUseProgram(0);
 }
@@ -721,23 +724,6 @@ void lookat_camera(){
     camera_position_c = glm::vec4(x, y, z, 1.0f);             // Ponto "c", centro da câmera
     camera_view_vector = camera_lookat_l - camera_position_c; // Vetor "view", sentido para onde a câmera está virada 
 }
-// glm::mat4 create_view_matrix()
-// {
-//     // Computamos a posição da câmera utilizando coordenadas esféricas.
-//     float r = g_CameraDistance;
-//     float y = r * sin(g_CameraPhi);
-//     float z = r * cos(g_CameraPhi) * cos(g_CameraTheta);
-//     float x = r * cos(g_CameraPhi) * sin(g_CameraTheta);
-
-//     glm::vec4 camera_position_c = glm::vec4(x, y, z, 1.0f);             // Ponto "c", centro da câmera
-//     glm::vec4 camera_lookat_l = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);      // Ponto "l", para onde a câmera (look-at) estará sempre olhando
-//     glm::vec4 camera_view_vector = camera_lookat_l - camera_position_c; // Vetor "view", sentido para onde a câmera está virada
-//     glm::vec4 camera_up_vector = glm::vec4(0.0f, 1.0f, 0.0f, 0.0f);     // Vetor "up" fixado para apontar para o "céu" (eito Y global)
-
-//     return Matrix_Camera_View(camera_position_c, camera_view_vector, camera_up_vector);
-// }
-
-
 
 glm::mat4 create_projection_matrix(){
     if (g_UsePerspectiveProjection)

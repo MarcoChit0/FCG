@@ -46,6 +46,15 @@ uniform sampler2D TextureImage6;
 uniform sampler2D TextureImage7;
 uniform sampler2D TextureImage8;
 
+// COW TEXTURES:
+uniform sampler2D TextureImage9;
+
+// MISSILE TEXTURES:
+uniform sampler2D TextureImage10;
+
+// PLAYER TEXTURES:
+uniform sampler2D TextureImage11;
+
 // O valor de saída ("out") de um Fragment Shader é a cor final do fragmento.
 out vec3 color;
 
@@ -114,52 +123,8 @@ void main()
 
     //check in ObjectModelMatrix.hpp the ids
 
-
-    /* asteroid -- for more information, check ObjectModelMatrix.names_to_id */
-    if(material_name_uniform == 3)   
-    {
-        U = texcoords.x;
-        V = texcoords.y;
-        
-        // refletância ambiente
-        Ka = vec3(1.0, 1.0, 1.0);
-        // refletância especular
-        Ks = vec3(0.5, 0.5, 0.5);
-        // expoente expecular
-        float q = 20.0;
-        // refletância difusa
-        Image_Kd = texture(TextureImage4, vec2(U, V)).rgb;
-
-        diffuse = Image_Kd * I * max(0,dot(n,l));
-        ambient = Ka * Ia;
-        specular = Ks * I * pow(max(0, dot(n, h)), q);
-
-        color.rgb = diffuse + ambient + specular;
-    }
-
-
-
-    //object_id == 2 UFO_metal
-    if(material_name_uniform == 2) {
-        U = texcoords.x;
-        V = texcoords.y;
-
-        Image_Kd = texture(TextureImage0, vec2(U,V)).rgb;
-        Image_Ns = texture(TextureImage1, vec2(U,V)).rgb;
-        Image_Mettalic = texture(TextureImage1, vec2(U,V)).rgb;
-
-
-        Ks = vec3(0.15, 0.15, 0.15);
-        Ka = vec3(0.5, 0.5, 0.5);
-
-        diffuse = Image_Kd * I * max(0,dot(n,l));
-        ambient = Ka * Ia;
-        specular = Ks * I * pow(max(0, dot(n, h)), 20.0);
-    
-        color = diffuse + ambient + specular;
-        color += Image_Mettalic *0.1;
-
-    } else {
+    /* UFO_Glass -- for more information, check ObjectModelMatrix.names_to_id */
+    if(material_name_uniform == 1) {
         vec4 bbox_center = (bbox_min + bbox_max) / 2.0;
 
         float rho = length(position_model - bbox_center);
@@ -189,7 +154,117 @@ void main()
         
         color = pow(color, vec3(1.0,1.0,1.0)/1.2);
     }
-   
+
+    /* UFO_Metal -- for more information, check ObjectModelMatrix.names_to_id */
+    if(material_name_uniform == 2) {
+        U = texcoords.x;
+        V = texcoords.y;
+
+        Image_Kd = texture(TextureImage0, vec2(U,V)).rgb;
+        Image_Ns = texture(TextureImage1, vec2(U,V)).rgb;
+        Image_Mettalic = texture(TextureImage1, vec2(U,V)).rgb;
+
+
+        Ks = vec3(0.15, 0.15, 0.15);
+        Ka = vec3(0.5, 0.5, 0.5);
+
+        diffuse = Image_Kd * I * max(0,dot(n,l));
+        ambient = Ka * Ia;
+        specular = Ks * I * pow(max(0, dot(n, h)), 20.0);
     
-} 
+        color = diffuse + ambient + specular;
+        color += Image_Mettalic *0.1;
+    }
+
+    /* asteroid -- for more information, check ObjectModelMatrix.names_to_id */
+    if(material_name_uniform == 3)   
+    {
+        U = texcoords.x;
+        V = texcoords.y;
+        
+        // refletância ambiente
+        Ka = vec3(1.0, 1.0, 1.0);
+        // refletância especular
+        Ks = vec3(0.5, 0.5, 0.5);
+        // expoente expecular
+        float q = 20.0;
+        // refletância difusa
+        Image_Kd = texture(TextureImage4, vec2(U, V)).rgb;
+
+        diffuse = Image_Kd * I * max(0,dot(n,l));
+        ambient = Ka * Ia;
+        specular = Ks * I * pow(max(0, dot(n, h)), q);
+
+        color.rgb = diffuse + ambient + specular;
+    }
+
+    /* cow -- for more information, check ObjectModelMatrix.names_to_id */
+    if(material_name_uniform == 4){
+        U = texcoords.x;
+        V = texcoords.y;
+        
+        // refletância difusa apenas
+        Image_Kd = texture(TextureImage9, vec2(U, V)).rgb;
+        Ks = vec3(0.1,0.1,0.1);
+        Ka = vec3(0.4,0.4,0.4);
+        float q = 20.0;
+
+        diffuse = Image_Kd * I * (max(0,dot(n,l)) + 0.01);
+        ambient = Ka * Ia;
+        specular = Ks * I * pow(max(0, dot(n, h)), q);
+
+        color.rgb = diffuse + ambient + specular;
+    }
+
+    /* missile -- for more information, check ObjectModelMatrix.names_to_id */
+    if(material_name_uniform == 5){
+        U = texcoords.x;
+        V = texcoords.y;
+        
+        // refletância ambiente
+        Ka = vec3(1.0,1.0,1.0);
+        // refletância especular
+        Ks = vec3(0.5, 0.5, 0.5);
+        // expoente expecular
+        float q = 20.0;
+        // refletância difusa
+        Image_Kd = texture(TextureImage10, vec2(U, V)).rgb;
+
+        diffuse = Image_Kd * I * (max(0,dot(n,l)) + 0.01);
+        ambient = Ka * Ia;
+        specular = Ks * I * pow(max(0, dot(n, h)), q);
+
+        color.rgb = diffuse + ambient + specular;
+    }
+
+    /* player -- for more information, check ObjectModelMatrix.names_to_id */
+    if (material_name_uniform == 6){
+        float minx = bbox_min.x;
+        float maxx = bbox_max.x;
+
+        float miny = bbox_min.y;
+        float maxy = bbox_max.y;
+
+        float minz = bbox_min.z;
+        float maxz = bbox_max.z;
+
+        U = (position_model.x - minx)/(maxx - minx);
+        V = (position_model.y - miny)/(maxy - miny);
+    
+        // refletância ambiente
+        Ks = vec3(1.0,1.0,1.0);
+        // refletância especular
+        Ka = vec3(0.5, 0.5, 0.5);
+        // expoente expecular
+        float q = 20.0;
+        // refletância difusa
+        Image_Kd = texture(TextureImage10, vec2(U, V)).rgb;
+
+        diffuse = Image_Kd * I * (max(0,dot(n,l)) + 0.01);
+        ambient = Ka * Ia;
+        specular = Ks * I * pow(max(0, dot(n, h)), q);
+
+        color.rgb = diffuse + ambient + specular;    
+    } 
+}
 

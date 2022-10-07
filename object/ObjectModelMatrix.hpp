@@ -19,7 +19,7 @@ using namespace std;
 
 vector <string> tokenize(string line, char delim=' ');
 
-map<string, int> names_to_id = {{"UFO_Glass", 1}, {"UFO_Metal", 2}, {"asteroid", 3}, {"missile", 4}, {"cow", 5}};
+map<string, int> names_to_id = {{"UFO_Glass", 1}, {"UFO_Metal", 2}, {"asteroid", 3}, {"cow", 4}, {"missile", 5}, {"player", 6}};
 
 // Estrutura responsável por controlar a posição dos objetos.
 class ObjectModelMatrix

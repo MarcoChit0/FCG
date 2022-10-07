@@ -32,6 +32,7 @@ void ufo_throws_asteroid();
 Player* player = new Player(PLAYER_ID, "player", Matrix_Translate(0.0f,0.0f,2.0f)*Matrix_Scale(0.1f, 0.1f, 0.1f));
 UFO* ufo = new UFO(UFO_ID, "ufo", Matrix_Translate(0.0f, 0.0f, -2.0f)*Matrix_Scale(0.1f, 0.1f, 0.1f));
 Cow* cow = new Cow(COW_ID, "cow", Matrix_Scale(0.1f, 0.1f, 0.1f));
+Cow* c2 = new Cow(COW_ID, "cow", Matrix_Translate(0.1f, 0.1f, 0.1f));
 
-vector <ObjectModelMatrix*> objects = {player, ufo, cow};
+vector <ObjectModelMatrix*> objects = {player, ufo, cow, c2};
 #endif

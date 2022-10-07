@@ -4,7 +4,7 @@
 #include "ObjectModelMatrix.hpp"
 #define MISSILE_OBJ_PATH "../../data/missile/MLRS_Rocket.obj"
 #define ADJUST_MISSILE_POSITION Matrix_Scale(0.25f, 0.25f, 0.25f)*Matrix_Rotate_Y(-3.1415/2.0)*Matrix_Rotate_Z(3.1415/2.0f)
-#define FOWARD_SPEED 50.0f
+#define FOWARD_SPEED 1.0f
 
 class Missile : public ObjectModelMatrix
 {
