@@ -166,7 +166,7 @@ class ComplexObjectModelMatrix : public ObjectModelMatrix
             for(unsigned long i=0; i < this->objs_components.size();i++){
                 glm::mat4 model = this->get_model();
                 glUniformMatrix4fv(model_uniform, 1, GL_FALSE, glm::value_ptr(model));
-                glUniform1i(material_name_uniform, names_to_id[g_VirtualScene[this->objs_components[i].c_str()].name]);
+                glUniform1i(material_name_uniform, names_to_id[this->objs_components[i].c_str()]);
                 // Tem que passar não para o nome do objeto, mas sim para o nome do "sub-objeto" que compõe o objeto
                 glUniform1i(object_id_uniform, names_to_id[this->objs_components[i]]);
                 DrawVirtualObject(this->objs_components[i].c_str());

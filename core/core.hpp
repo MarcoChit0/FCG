@@ -63,7 +63,7 @@ float current_time = glfwGetTime();
 float delta_t;
 
 // Número de texturas carregadas pela função LoadTextureImage()
-GLuint g_NumLoadedTextures = 0;
+GLuint g_NumLoadedTextures = 6;
 
 // A cena virtual é uma lista de objetos nomeados, guardados em um dicionário
 std::map<std::string, SceneObject> g_VirtualScene;

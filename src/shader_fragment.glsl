@@ -34,27 +34,27 @@ uniform vec4 bbox_max;
 uniform int material_name_uniform;
 
 // Variáveis para acesso das imagens de textura
-uniform sampler2D TextureImage0;
-uniform sampler2D TextureImage1;
-uniform sampler2D TextureImage2;
-uniform sampler2D TextureImage3;
-uniform sampler2D TextureImage4;
-
-// ASTEROID TEXTURES:
-uniform sampler2D TextureImage4;
-uniform sampler2D TextureImage5;
 uniform sampler2D TextureImage6;
 uniform sampler2D TextureImage7;
 uniform sampler2D TextureImage8;
-
-// COW TEXTURES:
 uniform sampler2D TextureImage9;
 
-// MISSILE TEXTURES:
+
+// ASTEROID TEXTURES:
 uniform sampler2D TextureImage10;
+uniform sampler2D TextureImage11;
+uniform sampler2D TextureImage12;
+uniform sampler2D TextureImage13;
+uniform sampler2D TextureImage14;
+
+// COW TEXTURES:
+uniform sampler2D TextureImage15;
+
+// MISSILE TEXTURES:
+uniform sampler2D TextureImage16;
 
 // PLAYER TEXTURES:
-uniform sampler2D TextureImage11;
+uniform sampler2D TextureImage17;
 
 // O valor de saída ("out") de um Fragment Shader é a cor final do fragmento.
 out vec3 color;
@@ -136,7 +136,7 @@ void main()
         V = (phi + M_PI_2) / M_PI;
 
 
-        Kd0 = texture(TextureImage3, vec2(U,V)).rgb;
+        Kd0 = texture(TextureImage9, vec2(U,V)).rgb;
         
         float q = 20.0;
 
@@ -161,9 +161,9 @@ void main()
         U = texcoords.x;
         V = texcoords.y;
 
-        Image_Kd = texture(TextureImage0, vec2(U,V)).rgb;
-        Image_Ns = texture(TextureImage1, vec2(U,V)).rgb;
-        Image_Mettalic = texture(TextureImage1, vec2(U,V)).rgb;
+        Image_Kd = texture(TextureImage6, vec2(U,V)).rgb;
+        Image_Ns = texture(TextureImage7, vec2(U,V)).rgb;
+        Image_Mettalic = texture(TextureImage7, vec2(U,V)).rgb;
 
 
         Ks = vec3(0.15, 0.15, 0.15);
@@ -190,7 +190,7 @@ void main()
         // expoente expecular
         float q = 20.0;
         // refletância difusa
-        Image_Kd = texture(TextureImage4, vec2(U, V)).rgb;
+        Image_Kd = texture(TextureImage10, vec2(U, V)).rgb;
 
         diffuse = Image_Kd * I * max(0,dot(n,l));
         ambient = Ka * Ia;
@@ -205,7 +205,7 @@ void main()
         V = texcoords.y;
         
         // refletância difusa apenas
-        Image_Kd = texture(TextureImage9, vec2(U, V)).rgb;
+        Image_Kd = texture(TextureImage15, vec2(U, V)).rgb;
         Ks = vec3(0.1,0.1,0.1);
         Ka = vec3(0.4,0.4,0.4);
         float q = 20.0;
@@ -229,7 +229,7 @@ void main()
         // expoente expecular
         float q = 20.0;
         // refletância difusa
-        Image_Kd = texture(TextureImage10, vec2(U, V)).rgb;
+        Image_Kd = texture(TextureImage16, vec2(U, V)).rgb;
 
         diffuse = Image_Kd * I * (max(0,dot(n,l)) + 0.01);
         ambient = Ka * Ia;
@@ -259,7 +259,7 @@ void main()
         // expoente expecular
         float q = 20.0;
         // refletância difusa
-        Image_Kd = texture(TextureImage10, vec2(U, V)).rgb;
+        Image_Kd = texture(TextureImage17, vec2(U, V)).rgb;
 
         diffuse = Image_Kd * I * (max(0,dot(n,l)) + 0.01);
         ambient = Ka * Ia;
