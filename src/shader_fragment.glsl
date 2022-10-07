@@ -136,7 +136,7 @@ void main()
         V = (phi + M_PI_2) / M_PI;
 
 
-        Kd0 = texture(TextureImage9, vec2(U,V)).rgb;
+        Kd0 = texture(TextureImage8, vec2(U,V)).rgb;
         
         float q = 20.0;
 
@@ -162,7 +162,6 @@ void main()
         V = texcoords.y;
 
         Image_Kd = texture(TextureImage6, vec2(U,V)).rgb;
-        Image_Ns = texture(TextureImage7, vec2(U,V)).rgb;
         Image_Mettalic = texture(TextureImage7, vec2(U,V)).rgb;
 
 
@@ -190,41 +189,13 @@ void main()
         // expoente expecular
         float q = 20.0;
         // refletância difusa
-        Image_Kd = texture(TextureImage10, vec2(U, V)).rgb;
+        Image_Kd = texture(TextureImage9, vec2(U, V)).rgb;
 
         diffuse = Image_Kd * I * max(0,dot(n,l));
         ambient = Ka * Ia;
         specular = Ks * I * pow(max(0, dot(n, h)), q);
 
         color.rgb = diffuse + ambient + specular;
-    }
-
-    /* cow -- for more information, check ObjectModelMatrix.names_to_id */
-    else if(material_name_uniform == 4){
-        float minx = bbox_min.x;
-        float maxx = bbox_max.x;
-
-        float miny = bbox_min.y;
-        float maxy = bbox_max.y;
-
-        float minz = bbox_min.z;
-        float maxz = bbox_max.z;
-
-        U = (position_model.x - minx)/(maxx - minx);
-        V = (position_model.y - miny)/(maxy - miny);
-        
-        U = U - floor(U);
-        V = V - floor(V);
-
-        // refletância difusa apenas
-        Image_Kd = texture(TextureImage15, vec2(U, V)).rgb;
-        Ks = vec3(0.1,0.1,0.1);
-        Ka = vec3(0.4,0.4,0.4);
-        float q = 20.0;
-
-        diffuse = Image_Kd * I * (max(0,dot(n,l)) + 0.01);
-
-        color.rgb = diffuse;
     }
 
     /* missile -- for more information, check ObjectModelMatrix.names_to_id */
@@ -239,7 +210,7 @@ void main()
         // expoente expecular
         float q = 20.0;
         // refletância difusa
-        Image_Kd = texture(TextureImage16, vec2(U, V)).rgb;
+        Image_Kd = texture(TextureImage11, vec2(U, V)).rgb;
 
         diffuse = Image_Kd * I * (max(0,dot(n,l)) + 0.01);
         ambient = Ka * Ia;
@@ -271,7 +242,7 @@ void main()
         // expoente expecular
         float q = 20.0;
         // refletância difusa
-        Image_Kd = texture(TextureImage17, vec2(U, V)).rgb;
+        Image_Kd = texture(TextureImage12, vec2(U, V)).rgb;
 
         diffuse = Image_Kd * I * (max(0,dot(n,l)) + 0.01);
         ambient = Ka * Ia;
@@ -287,23 +258,11 @@ void main()
         || material_name_uniform == 13
         || material_name_uniform == 14
         ){
-            float minx = bbox_min.x;
-            float maxx = bbox_max.x;
-
-            float miny = bbox_min.y;
-            float maxy = bbox_max.y;
-
-            float minz = bbox_min.z;
-            float maxz = bbox_max.z;
-
-            U = (position_model.x - minx)/(maxx - minx);
-            V = (position_model.y - miny)/(maxy - miny);
-
-            U = U - floor(U);
-            V = V - floor(V);
+            U = texcoords.x;
+            V = texcoords.y;
 
             // refletância difusa apenas
-            Image_Kd = texture(TextureImage9, vec2(U, V)).rgb;
+            Image_Kd = texture(TextureImage10, vec2(U, V)).rgb;
 
             diffuse = Image_Kd * I * (max(0,dot(n,l)) + 0.01);
 

@@ -78,8 +78,8 @@ GLFWwindow *initialize(int argc, char *argv[])
     skyboxshader = new Shader("/home/macsilva/Desktop/ufrgs/cadeiras/2022/01/fcg/trabalho_final/FCG/src/skybox_vertex.vs",
      "/home/macsilva/Desktop/ufrgs/cadeiras/2022/01/fcg/trabalho_final/FCG/src/skybox_fragment.fs");  
    
-    load_texture_images(texture_images);
     cubemapTexture = loadCubemap(cube_map_faces);
+    load_texture_images(texture_images);
     
     glGenVertexArrays(1, &skyboxVAO);
     glGenBuffers(1, &skyboxVBO);
