@@ -19,7 +19,7 @@ using namespace std;
 
 vector <string> tokenize(string line, char delim=' ');
 
-map<string, int> names_to_id = {{"UFO_Glass", 1}, {"UFO_Metal", 2}, {"asteroid", 3}, {"missile", 4}};
+map<string, int> names_to_id = {{"UFO_Glass", 1}, {"UFO_Metal", 2}, {"asteroid", 3}, {"missile", 4}, {"cow", 5}};
 
 // Estrutura responsável por controlar a posição dos objetos.
 class ObjectModelMatrix
@@ -80,7 +80,7 @@ public:
         DrawVirtualObject(this->name.c_str());
     }
 
-    virtual void draw_and_apply_transform(){
+    virtual void apply_transform_and_draw(){
         this->apply_transform();
         this->draw();
     }

@@ -39,6 +39,13 @@ uniform sampler2D TextureImage1;
 uniform sampler2D TextureImage2;
 uniform sampler2D TextureImage3;
 
+// ASTEROID TEXTURES:
+uniform sampler2D TextureImage4;
+uniform sampler2D TextureImage5;
+uniform sampler2D TextureImage6;
+uniform sampler2D TextureImage7;
+uniform sampler2D TextureImage8;
+
 // O valor de saída ("out") de um Fragment Shader é a cor final do fragmento.
 out vec3 color;
 
@@ -107,12 +114,36 @@ void main()
 
     //check in ObjectModelMatrix.hpp the ids
 
+
+    /* asteroid -- for more information, check ObjectModelMatrix.names_to_id */
+    if(material_name_uniform == 3)   
+    {
+        U = texcoords.x;
+        V = texcoords.y;
+        
+        // refletância ambiente
+        Ka = vec3(1.0, 1.0, 1.0);
+        // refletância especular
+        Ks = vec3(0.5, 0.5, 0.5);
+        // expoente expecular
+        float q = 20.0;
+        // refletância difusa
+        Image_Kd = texture(TextureImage4, vec2(U, V)).rgb;
+
+        diffuse = Image_Kd * I * max(0,dot(n,l));
+        ambient = Ka * Ia;
+        specular = Ks * I * pow(max(0, dot(n, h)), q);
+
+        color.rgb = diffuse + ambient + specular;
+    }
+
+
+
     //object_id == 2 UFO_metal
     if(material_name_uniform == 2) {
         U = texcoords.x;
         V = texcoords.y;
 
-        
         Image_Kd = texture(TextureImage0, vec2(U,V)).rgb;
         Image_Ns = texture(TextureImage1, vec2(U,V)).rgb;
         Image_Mettalic = texture(TextureImage1, vec2(U,V)).rgb;
