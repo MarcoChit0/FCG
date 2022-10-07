@@ -22,7 +22,7 @@ class Asteroid : public ObjectModelMatrix
         this->spawn_point = glm::vec4(x,y,z, 1.0f);
     }
     Asteroid(int id, string name, glm::mat4 model):
-    ObjectModelMatrix(id, name, model, ASTEROID_OBJ_PATH)
+    ObjectModelMatrix(id, name, model, ASTEROID_OBJ_PATH, {})
     {
         float x = model[3].x;
         float y = model[3].y;
@@ -32,10 +32,7 @@ class Asteroid : public ObjectModelMatrix
     void draw(){
         this->update_model(Matrix_Rotate_X(ROTATION_DEGREE)*ROTATION_SPEED);
         this->update_model_extrinsic(Matrix_Translate(0.0f, 0.0f, TRANSLATION_SPEED*delta_t)); 
-        glm::mat4 model = this->get_model();
-        glUniformMatrix4fv(model_uniform, 1, GL_FALSE, glm::value_ptr(model));
-        glUniform1i(object_id_uniform, names_to_id[this->get_name()]);
-        DrawVirtualObject(this->get_name().c_str());
+        ObjectModelMatrix::draw();
     }
     // void draw(){
     //     this->update_model(Matrix_Rotate_X(ROTATION_DEGREE)*ROTATION_SPEED);

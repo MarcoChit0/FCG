@@ -19,7 +19,7 @@ using namespace std;
 
 vector <string> tokenize(string line, char delim=' ');
 
-map<string, int> names_to_id = {{"UFO_Glass", 1}, {"UFO_Metal", 2}};
+map<string, int> names_to_id = {{"UFO_Glass", 1}, {"UFO_Metal", 2}, {"asteroid", 3}, {"missile", 4}};
 
 // Estrutura responsável por controlar a posição dos objetos.
 class ObjectModelMatrix
@@ -73,11 +73,16 @@ public:
     }
 
     virtual void draw(){
-        this->apply_transform();
         model = this->model;
         glUniformMatrix4fv(model_uniform, 1, GL_FALSE, glm::value_ptr(model));
         glUniform1i(object_id_uniform, names_to_id[this->get_name()]);
+        glUniform1i(object_id_uniform, names_to_id[this->name]);
         DrawVirtualObject(this->name.c_str());
+    }
+
+    virtual void draw_and_apply_transform(){
+        this->apply_transform();
+        this->draw();
     }
 
     virtual void recover_bbox(){
@@ -91,29 +96,29 @@ public:
 class ComplexObjectModelMatrix : public ObjectModelMatrix
 {
     private: 
-        vector <string> objs_names;
+        vector <string> objs_components;
         string path_to_obj_file;
     public:
-        ComplexObjectModelMatrix(int id, string name, glm::mat4 model, string path, vector<glm::mat4> transform, vector <string> objs_names) :  
+        ComplexObjectModelMatrix(int id, string name, glm::mat4 model, string path, vector<glm::mat4> transform, vector <string> objs_components) :  
         ObjectModelMatrix(id, name, model, path, transform) 
         {
             this->path_to_obj_file = path;
-            this->objs_names = objs_names;
+            this->objs_components = objs_components;
         }
         ComplexObjectModelMatrix(int id, string name, glm::mat4 model, string path, vector<glm::mat4> transform): 
         ObjectModelMatrix(id, name, model, path, transform)
         {
             this->path_to_obj_file = path;
-            this->recover_objs_names();
+            this->recover_objs_components();
         } 
         ComplexObjectModelMatrix(int id, string name, glm::mat4 model, string path): 
         ObjectModelMatrix(id, name, model, path)
         {
             this->path_to_obj_file = path;
-            this->recover_objs_names();
+            this->recover_objs_components();
         }
 
-        void recover_objs_names(){
+        void recover_objs_components(){
             ifstream file; 
             file.open(this->path_to_obj_file);
             if(file.is_open()){
@@ -123,7 +128,7 @@ class ComplexObjectModelMatrix : public ObjectModelMatrix
                     tokens = tokenize(line);
                     // topologia dos objetos no arquivo .obj em uma linha começa com o, g ou usemtl
                     if (tokens[0] == "o" || tokens[0] == "g" || tokens[0] == "usemtl"){
-                        this->objs_names.push_back(tokens[1]);
+                        this->objs_components.push_back(tokens[1]);
                     }
                 }
             }
@@ -134,21 +139,21 @@ class ComplexObjectModelMatrix : public ObjectModelMatrix
         }
 
         void recover_bbox(){
-            float   min_x = g_VirtualScene[this->objs_names[0]].bbox_min.x, 
-                    min_y = g_VirtualScene[this->objs_names[0]].bbox_min.y, 
-                    min_z = g_VirtualScene[this->objs_names[0]].bbox_min.z;
-            float   max_x = g_VirtualScene[this->objs_names[0]].bbox_max.x, 
-                    max_y = g_VirtualScene[this->objs_names[0]].bbox_max.y, 
-                    max_z = g_VirtualScene[this->objs_names[0]].bbox_max.z;
+            float   min_x = g_VirtualScene[this->objs_components[0]].bbox_min.x, 
+                    min_y = g_VirtualScene[this->objs_components[0]].bbox_min.y, 
+                    min_z = g_VirtualScene[this->objs_components[0]].bbox_min.z;
+            float   max_x = g_VirtualScene[this->objs_components[0]].bbox_max.x, 
+                    max_y = g_VirtualScene[this->objs_components[0]].bbox_max.y, 
+                    max_z = g_VirtualScene[this->objs_components[0]].bbox_max.z;
             // É necessário pegar os menores e maiores coordenadas de TODOS os componentes.
-            for(unsigned long i = 0; i < this->objs_names.size(); i++){
-                if(min_x > g_VirtualScene[this->objs_names[i]].bbox_min.x) min_x = g_VirtualScene[this->objs_names[i]].bbox_min.x;
-                if(min_y > g_VirtualScene[this->objs_names[i]].bbox_min.y) min_y = g_VirtualScene[this->objs_names[i]].bbox_min.y;
-                if(min_z > g_VirtualScene[this->objs_names[i]].bbox_min.z) min_z = g_VirtualScene[this->objs_names[i]].bbox_min.z;
+            for(unsigned long i = 0; i < this->objs_components.size(); i++){
+                if(min_x > g_VirtualScene[this->objs_components[i]].bbox_min.x) min_x = g_VirtualScene[this->objs_components[i]].bbox_min.x;
+                if(min_y > g_VirtualScene[this->objs_components[i]].bbox_min.y) min_y = g_VirtualScene[this->objs_components[i]].bbox_min.y;
+                if(min_z > g_VirtualScene[this->objs_components[i]].bbox_min.z) min_z = g_VirtualScene[this->objs_components[i]].bbox_min.z;
                 
-                if(max_x < g_VirtualScene[this->objs_names[i]].bbox_max.x) max_x = g_VirtualScene[this->objs_names[i]].bbox_max.x;
-                if(max_y < g_VirtualScene[this->objs_names[i]].bbox_max.y) max_y = g_VirtualScene[this->objs_names[i]].bbox_max.y;
-                if(max_z < g_VirtualScene[this->objs_names[i]].bbox_max.z) max_z = g_VirtualScene[this->objs_names[i]].bbox_max.z;
+                if(max_x < g_VirtualScene[this->objs_components[i]].bbox_max.x) max_x = g_VirtualScene[this->objs_components[i]].bbox_max.x;
+                if(max_y < g_VirtualScene[this->objs_components[i]].bbox_max.y) max_y = g_VirtualScene[this->objs_components[i]].bbox_max.y;
+                if(max_z < g_VirtualScene[this->objs_components[i]].bbox_max.z) max_z = g_VirtualScene[this->objs_components[i]].bbox_max.z;
             }    
             glm::vec3 bbox_min = glm::vec3(min_x, min_y, min_z);
             glm::vec3 bbox_max = glm::vec3(max_x, max_y, max_z);
@@ -158,14 +163,15 @@ class ComplexObjectModelMatrix : public ObjectModelMatrix
 
         virtual void draw(){
             this->apply_transform();
-            for(unsigned long i=0; i < this->objs_names.size();i++){
+            for(unsigned long i=0; i < this->objs_components.size();i++){
                 glm::mat4 model = this->get_model();
                 glUniformMatrix4fv(model_uniform, 1, GL_FALSE, glm::value_ptr(model));
-                glUniform1i(material_name_uniform, names_to_id[g_VirtualScene[this->objs_names[i].c_str()].name]);
-                glUniform1i(object_id_uniform, names_to_id[this->get_name()]);
-                DrawVirtualObject(this->objs_names[i].c_str());
+                glUniform1i(material_name_uniform, names_to_id[g_VirtualScene[this->objs_components[i].c_str()].name]);
+                // Tem que passar não para o nome do objeto, mas sim para o nome do "sub-objeto" que compõe o objeto
+                glUniform1i(object_id_uniform, names_to_id[this->objs_components[i]]);
+                DrawVirtualObject(this->objs_components[i].c_str());
             }
         }
-        vector <string> get_components() {return this->objs_names;}
+        vector <string> get_components() {return this->objs_components;}
 };
 #endif

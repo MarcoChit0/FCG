@@ -17,10 +17,7 @@ class Missile : public ObjectModelMatrix
     {}
     void draw(){
         this->update_model(Matrix_Translate(0.0f, FOWARD_SPEED*delta_t, 0.0f));
-        glm::mat4 model = this->get_model();
-        glUniformMatrix4fv(model_uniform, 1, GL_FALSE, glm::value_ptr(model));
-        glUniform1i(object_id_uniform, names_to_id[this->get_name()]);
-        DrawVirtualObject(this->get_name().c_str());
+        ObjectModelMatrix::draw();
     }
 };
 
