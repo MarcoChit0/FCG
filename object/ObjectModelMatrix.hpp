@@ -122,7 +122,7 @@ class ComplexObjectModelMatrix : public ObjectModelMatrix
                 while(getline(file, line)){
                     tokens = tokenize(line);
                     // topologia dos objetos no arquivo .obj em uma linha começa com o, g ou usemtl
-                    if (tokens[0] == "o" || tokens[0] == "g" || tokens[0] == "usemtl" || tokens[0] == "mtllib"){
+                    if (tokens[0] == "o" || tokens[0] == "g" || tokens[0] == "usemtl"){
                         this->objs_names.push_back(tokens[1]);
                     }
                 }
@@ -161,7 +161,6 @@ class ComplexObjectModelMatrix : public ObjectModelMatrix
             for(unsigned long i=0; i < this->objs_names.size();i++){
                 glm::mat4 model = this->get_model();
                 glUniformMatrix4fv(model_uniform, 1, GL_FALSE, glm::value_ptr(model));
-                //std::cout << g_VirtualScene[this->objs_names[i].c_str()].name << " " << names_to_id[g_VirtualScene[this->objs_names[i].c_str()].name] << "\n";
                 glUniform1i(material_name_uniform, names_to_id[g_VirtualScene[this->objs_names[i].c_str()].name]);
                 glUniform1i(object_id_uniform, names_to_id[this->get_name()]);
                 DrawVirtualObject(this->objs_names[i].c_str());

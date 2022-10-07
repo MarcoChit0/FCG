@@ -1,7 +1,7 @@
 # Blender v2.78 (sub 0) OBJ File: ''
 # www.blender.org
 mtllib ../../data/asteroid/A2.mtl
-o Group57342
+o asteroid
 v 0.053714 -0.298142 0.421372
 v 0.116346 -0.307956 0.442967
 v 0.153603 -0.245975 0.476022
