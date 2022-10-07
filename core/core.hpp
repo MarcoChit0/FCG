@@ -19,6 +19,7 @@
 #include "utils.h"
 #include "matrices.h"
 #include "../user_input/user_input.hpp"
+#include "../src/shader.hpp"
 
 #define NEARPLANE  -0.1f
 #define FARPLANE  -10.0f
@@ -40,6 +41,11 @@ GLint object_id_uniform;
 GLint bbox_min_uniform;
 GLint bbox_max_uniform;
 GLint material_name_uniform;
+
+// váriaveis utilizadas para o sky box
+GLuint program_id2 = 2;
+GLuint skybox_vertex_shader_id, skybox_fragment_shader_id;
+unsigned int cubemapTexture;
 
 // Variáveis utilizadas para look-at camera
 glm::vec4 camera_lookat_l = glm::vec4(0.0f, 0.0f, 0.0f, 1.0f); 
@@ -66,9 +72,68 @@ std::stack<glm::mat4>  g_MatrixStack;
 std::vector<std::string> texture_images= {
     "../../data/ufo/Textures/UFO_Metal_BaseColor.png",
     "../../data//ufo/Textures/UFO_Metal_Roughness.png",
-    "../../data//ufo/Textures/UFO_Metal_Metallic.png",
+    "../../data/ufo/Textures/UFO_Metal_Metallic.png",
+    "../../data/ufo/Textures/UFO_Metal_Normal.png",
     "../../data/tc-earth_daymap_surface.jpg"
 };
+
+std::vector<std::string> cube_map_faces = 
+{
+    "/home/bervig/Documents/UFRGS/Quinto Semestre/Fundamentos de Computação Gráfica/FCG/data/skybox/right.png",
+    "/home/bervig/Documents/UFRGS/Quinto Semestre/Fundamentos de Computação Gráfica/FCG/data/skybox/left.png",
+    "/home/bervig/Documents/UFRGS/Quinto Semestre/Fundamentos de Computação Gráfica/FCG/data/skybox/top.png",
+    "/home/bervig/Documents/UFRGS/Quinto Semestre/Fundamentos de Computação Gráfica/FCG/data/skybox/bottom.png",
+    "/home/bervig/Documents/UFRGS/Quinto Semestre/Fundamentos de Computação Gráfica/FCG/data/skybox/front.png",
+    "/home/bervig/Documents/UFRGS/Quinto Semestre/Fundamentos de Computação Gráfica/FCG/data/skybox/back.png"
+};
+
+float skyboxVertices[] = {
+    // positions          
+    -1000.0f,  1000.0f, -1000.0f,
+    -1000.0f, -1000.0f, -1000.0f,
+     1000.0f, -1000.0f, -1000.0f,
+     1000.0f, -1000.0f, -1000.0f,
+     1000.0f,  1000.0f, -1000.0f,
+    -1000.0f,  1000.0f, -1000.0f,
+
+    -1000.0f, -1000.0f,  1000.0f,
+    -1000.0f, -1000.0f, -1000.0f,
+    -1000.0f,  1000.0f, -1000.0f,
+    -1000.0f,  1000.0f, -1000.0f,
+    -1000.0f,  1000.0f,  1000.0f,
+    -1000.0f, -1000.0f,  1000.0f,
+
+     1000.0f, -1000.0f, -1000.0f,
+     1000.0f, -1000.0f,  1000.0f,
+     1000.0f,  1000.0f,  1000.0f,
+     1000.0f,  1000.0f,  1000.0f,
+     1000.0f,  1000.0f, -1000.0f,
+     1000.0f, -1000.0f, -1000.0f,
+
+    -1000.0f, -1000.0f,  1000.0f,
+    -1000.0f,  1000.0f,  1000.0f,
+     1000.0f,  1000.0f,  1000.0f,
+     1000.0f,  1000.0f,  1000.0f,
+     1000.0f, -1000.0f,  1000.0f,
+    -1000.0f, -1000.0f,  1000.0f,
+
+    -1000.0f,  1000.0f, -1000.0f,
+     1000.0f,  1000.0f, -1000.0f,
+     1000.0f,  1000.0f,  1000.0f,
+     1000.0f,  1000.0f,  1000.0f,
+    -1000.0f,  1000.0f,  1000.0f,
+    -1000.0f,  1000.0f, -1000.0f,
+
+    -1000.0f, -1000.0f, -1000.0f,
+    -1000.0f, -1000.0f,  1000.0f,
+     1000.0f, -1000.0f, -1000.0f,
+     1000.0f, -1000.0f, -1000.0f,
+    -1000.0f, -1000.0f,  1000.0f,
+     1000.0f, -1000.0f,  1000.0f
+};
+unsigned int skyboxVAO, skyboxVBO;
+Shader *skyboxshader;
+
 
 // Declaração de funções utilizadas para pilha de matrizes de modelagem.
 void PushMatrix(glm::mat4 M);
@@ -88,6 +153,7 @@ void load_texture_images(std::vector<std::string> paths);
 glm::mat4 create_view_matrix();
 glm::mat4 create_projection_matrix();
 void game_logic();
+unsigned int loadCubemap(std::vector<std::string> faces);
 // Curvas de Bezier
 glm::vec4 curva_Bezier(int n, glm::vec4 pontos_controle[], float t);
 float Bernstein(int n, int k, float t);

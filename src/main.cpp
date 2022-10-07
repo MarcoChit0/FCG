@@ -5,7 +5,7 @@ int main(int argc, char *argv[])
     srand(time(0));
 
     GLFWwindow *window = initialize(argc, argv);
-
+    
     while (!glfwWindowShouldClose(window))
     {
         frame(window);
@@ -39,7 +39,7 @@ GLFWwindow *initialize(int argc, char *argv[])
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     GLFWwindow *window;
-    window = glfwCreateWindow(800, 600, window_title, NULL, NULL);
+    window = glfwCreateWindow(1600, 1200, window_title, NULL, NULL);
     if (!window)
     {
         glfwTerminate();
@@ -63,7 +63,7 @@ GLFWwindow *initialize(int argc, char *argv[])
     glfwSetFramebufferSizeCallback(window, FramebufferSizeCallback);
 
     // Forçar resolução da janela
-    FramebufferSizeCallback(window, 800, 600);
+    FramebufferSizeCallback(window, 1600, 1200);
 
     // Imprimimos no terminal informações sobre a GPU do sistema
     printf("GPU: %s, %s, OpenGL %s, GLSL %s\n",
@@ -75,7 +75,19 @@ GLFWwindow *initialize(int argc, char *argv[])
     // Carregamos os shaders de vértices e de fragmentos
     LoadShadersFromFiles();
 
-    load_texture_images(texture_images);
+    skyboxshader = new Shader("/home/bervig/Documents/UFRGS/Quinto Semestre/Fundamentos de Computação Gráfica/FCG/src/skybox_vertex.vs", 
+                               "/home/bervig/Documents/UFRGS/Quinto Semestre/Fundamentos de Computação Gráfica/FCG/src/skybox_fragment.fs");  
+   
+    //load_texture_images(texture_images);
+    cubemapTexture = loadCubemap(cube_map_faces);
+    
+    glGenVertexArrays(1, &skyboxVAO);
+    glGenBuffers(1, &skyboxVBO);
+    glBindVertexArray(skyboxVAO);
+    glBindBuffer(GL_ARRAY_BUFFER, skyboxVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices), &skyboxVertices, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 
     // Construímos a representação de objetos geométricos através de malhas de triângulos
     create_geometric_objects();
@@ -110,17 +122,23 @@ void frame(GLFWwindow *window)
     //  e também resetamos todos os pixels do Z-buffer (depth buffer).
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    // Pedimos para a GPU utilizar o programa de GPU criado acima (contendo os shaders de vértice e fragmentos).
-    glUseProgram(program_id);
-
     if(using_free_camera){
         free_camera();
     }
     else{
         lookat_camera();
     }
-    glm::mat4 view = create_view_matrix();
+
+    //position glm::vec3(0.0f, 0.0f, 0.0f), front: glm::vec3(0.0f, 0.0f, -1.0f)
+    //up
+   /*glm::mat4 view = glm::mat4(glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.0f, 1.0f, 0.0f)));
+    glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)800 / (float)600, 0.1f, 100.0f);
+ */ glm::mat4 view = create_view_matrix();
     glm::mat4 projection = create_projection_matrix();
+    
+
+    // Pedimos para a GPU utilizar o programa de GPU criado acima (contendo os shaders de vértice e fragmentos).
+    glUseProgram(program_id);
 
     // Enviamos as matrizes "view" e "projection" para a GPU.
     glUniformMatrix4fv(view_uniform, 1, GL_FALSE, glm::value_ptr(view));
@@ -130,6 +148,29 @@ void frame(GLFWwindow *window)
     draw_objects();
     collision_handler();
     game_logic();
+
+    //glUseProgram(program_id2);
+    skyboxshader->use();
+    skyboxshader->setInt("skybox", 0);
+
+    // draw skybox as last
+    glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
+    skyboxshader->use();
+    skyboxshader->setMat4("view", glm::mat4(glm::lookAt(
+        glm::vec3(camera_position_c[0], camera_position_c[1], camera_position_c[2]), 
+        glm::vec3(camera_position_c[0], camera_position_c[1], camera_position_c[2]) + 
+        glm::vec3(camera_view_vector[0], camera_view_vector[1], camera_view_vector[2]), 
+        glm::vec3(camera_up_vector[0], camera_up_vector[1], camera_up_vector[2])
+        )));
+    skyboxshader->setMat4("projection", projection);
+    // skybox cube
+    glBindVertexArray(skyboxVAO);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
+    glDrawArrays(GL_TRIANGLES, 0, 36);
+    glBindVertexArray(0);
+    glDepthFunc(GL_LESS); // set depth function back to default
+
 
     // Imprime dados na tela
     TextRendering_ShowProjection(window);

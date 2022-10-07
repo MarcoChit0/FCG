@@ -27,6 +27,8 @@
 #include <glm/mat4x4.hpp>
 #include <glm/vec4.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
 
 // Headers da biblioteca para carregar modelos obj
 #include <tiny_obj_loader.h>
@@ -55,6 +57,7 @@
 #include "../object/ObjectModel.hpp"
 #include "../object/Objects.hpp"
 #include "../object/Objects.cpp"
+#include "shader.hpp"
 
 // COLLISIONS:
 #include "../collisions/collisions.hpp"

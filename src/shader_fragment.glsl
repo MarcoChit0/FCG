@@ -38,6 +38,7 @@ uniform sampler2D TextureImage0;
 uniform sampler2D TextureImage1;
 uniform sampler2D TextureImage2;
 uniform sampler2D TextureImage3;
+uniform sampler2D TextureImage4;
 
 // O valor de saída ("out") de um Fragment Shader é a cor final do fragmento.
 out vec3 color;
@@ -90,7 +91,7 @@ void main()
     /* Espectro da fonte de iluminação */
     vec3 I = vec3(1.0, 1.0, 1.0);
     /* Espectro da luz ambiente */
-    vec3 Ia = vec3(0.6, 0.6, 0.6);
+    vec3 Ia = vec3(1, 1, 1);
 
     vec4 lightPos = vec4(0.0, 100.0, 1.0, 1.0);
     vec4 lightDir = vec4(0.0, -1.0, 0.0, 0.0);
@@ -102,7 +103,7 @@ void main()
     vec4 h = normalize(l + v);
 
 
-    vec3 Kd0, Image_Kd, Image_Ns, Image_Mettalic,
+    vec3 Kd0, Image_Kd, Image_Ns, Image_Mettalic, Image_BumpMap,
          Ks, Ka, lambert_diffuse, ambient, blinnPhong, diffuse, specular;
 
     //check in ObjectModelMatrix.hpp the ids
@@ -115,7 +116,8 @@ void main()
         
         Image_Kd = texture(TextureImage0, vec2(U,V)).rgb;
         Image_Ns = texture(TextureImage1, vec2(U,V)).rgb;
-        Image_Mettalic = texture(TextureImage1, vec2(U,V)).rgb;
+        Image_Mettalic = texture(TextureImage2, vec2(U,V)).rgb;
+        Image_BumpMap = texture(TextureImage3, vec2(U,V)).rgb;
 
 
         Ks = vec3(0.15, 0.15, 0.15);
@@ -123,11 +125,14 @@ void main()
 
         diffuse = Image_Kd * I * max(0,dot(n,l));
         ambient = Ka * Ia;
-        specular = Ks * I * pow(max(0, dot(n, h)), 20.0);
+        specular = Ks * I * pow(max(0, dot(n, h)), 30.0);
     
         color = diffuse + ambient + specular;
         color += Image_Mettalic *0.1;
+        //color += Image_BumpMap;
 
+    } else if(material_name_uniform == 1) { //UFO_glass
+        
     } else {
         vec4 bbox_center = (bbox_min + bbox_max) / 2.0;
 
