@@ -195,7 +195,7 @@ void DrawVirtualObject(const char* object_name)
     // alterar o mesmo. Isso evita bugs.
     glBindVertexArray(0);
 }
-
+// FONTE https://learnopengl.com/Advanced-OpenGL/Cubemaps
 unsigned int loadCubemap(vector<std::string> faces)
 {
     unsigned int textureID;

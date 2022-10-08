@@ -8,7 +8,8 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
-//pego de https://learnopengl.com/Advanced-OpenGL/Cubemaps
+
+// FONTE https://learnopengl.com/Advanced-OpenGL/Cubemaps
 class Shader
 {
 public:

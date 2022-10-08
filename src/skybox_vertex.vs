@@ -5,6 +5,7 @@ out vec3 TexCoords;
 
 uniform mat4 projection;
 uniform mat4 view;
+// FONTE https://learnopengl.com/Advanced-OpenGL/Cubemaps
 
 void main()
 {
