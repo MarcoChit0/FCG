@@ -75,8 +75,8 @@ GLFWwindow *initialize(int argc, char *argv[])
     // Carregamos os shaders de vértices e de fragmentos
     LoadShadersFromFiles();
 
-    skyboxshader = new Shader("/home/macsilva/Desktop/ufrgs/cadeiras/2022/01/fcg/trabalho_final/FCG/src/skybox_vertex.vs",
-     "/home/macsilva/Desktop/ufrgs/cadeiras/2022/01/fcg/trabalho_final/FCG/src/skybox_fragment.fs");  
+    skyboxshader = new Shader("/home/bervig/Documents/UFRGS/Quinto Semestre/Fundamentos de Computação Gráfica/FCG/src/skybox_vertex.vs",
+     "/home/bervig/Documents/UFRGS/Quinto Semestre/Fundamentos de Computação Gráfica/FCG/src/skybox_fragment.fs");  
    
     cubemapTexture = loadCubemap(cube_map_faces);
     load_texture_images(texture_images);
@@ -158,12 +158,7 @@ void frame(GLFWwindow *window)
     // draw skybox as last
     glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
     skyboxshader->use();
-    skyboxshader->setMat4("view", glm::mat4(glm::lookAt(
-        glm::vec3(camera_position_c[0], camera_position_c[1], camera_position_c[2]), 
-        glm::vec3(camera_position_c[0], camera_position_c[1], camera_position_c[2]) + 
-        glm::vec3(camera_view_vector[0], camera_view_vector[1], camera_view_vector[2]), 
-        glm::vec3(camera_up_vector[0], camera_up_vector[1], camera_up_vector[2])
-        )));
+    skyboxshader->setMat4("view", view);
     skyboxshader->setMat4("projection", projection);
     // skybox cube
     glBindVertexArray(skyboxVAO);

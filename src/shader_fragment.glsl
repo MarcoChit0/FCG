@@ -63,17 +63,6 @@ out vec3 color;
 #define M_PI   3.14159265358979323846
 #define M_PI_2 1.57079632679489661923
 
-vec3 get_ilummination(vec3 Kd0, vec3 Ka, vec3 Ks, vec3 I, vec3 Ia, float q, vec4 n, vec4 h, vec4 l) {   
-    vec3 lambert_diffuse, ambient, blinnPhong;
-    // Equação de Iluminação
-    lambert_diffuse = Kd0 * I * max(0,dot(n,l));
-
-    ambient = Ka * Ia;
-    //vec3 phong = Ks * I * pow(max(0, dot(r, v)), q);
-    blinnPhong = Ks * I * pow(max(0, dot(n, h)), q);
-
-    return lambert_diffuse + ambient + blinnPhong;
-}
 
 void main()
 {
@@ -101,175 +90,168 @@ void main()
     float U = 0.0;
     float V = 0.0;
 
-
-     /* Iluminação */
-
+    
     /* Espectro da fonte de iluminação */
-    vec3 I = vec3(1.0, 1.0, 1.0);
+    vec3 I = vec3(1.0, 1, 1);
     /* Espectro da luz ambiente */
-    vec3 Ia = vec3(0.6, 0.6, 0.6);
+    vec3 Ia = vec3(1, 0.9, 0.9);
 
     vec4 lightPos = vec4(0.0, 100.0, 1.0, 1.0);
     vec4 lightDir = vec4(0.0, -1.0, 0.0, 0.0);
     vec4 l = normalize(lightPos - p);
     vec4 r = normalize(-l + 2*n*(dot(n, l)));
 
-
-    //Vetor usado para iluminação de Blinn-Phong
     vec4 h = normalize(l + v);
 
 
-    vec3 Kd0, Image_Kd, Image_Ns, Image_Mettalic,
+    vec3 Image_Kd, Image_Mettalic,
          Ks, Ka, lambert_diffuse, ambient, blinnPhong, diffuse, specular;
 
     //check in ObjectModelMatrix.hpp the ids
 
     /* UFO_Glass -- for more information, check ObjectModelMatrix.names_to_id */
     if(material_name_uniform == 1) {
-        vec4 bbox_center = (bbox_min + bbox_max) / 2.0;
+        U = texcoords.x;
+        V = texcoords.y;
 
-        float rho = length(position_model - bbox_center);
-        float theta = atan(position_model.x, position_model.z);
-        float phi = asin(position_model.y / rho);
-
-        U = (theta + M_PI) / (2 * M_PI);
-        V = (phi + M_PI_2) / M_PI;
-
-
-        Kd0 = texture(TextureImage8, vec2(U,V)).rgb;
+        Image_Kd = texture(TextureImage8, vec2(U,V)).rgb;
         
-        float q = 20.0;
+        float q = 50.0;
 
-        /* Refletancia especular */
         Ks = vec3(0.2, 0.2, 0.3);
-        /* Refletancia ambiente */
-        Ka = vec3(0.4, 0.4, 0.4);
+        Ka = vec3(0.6, 0.6, 0.6);
 
         // Equação de Iluminação
-        lambert_diffuse = Kd0 * I * max(0,dot(n,l));
+        lambert_diffuse = Image_Kd * I * max(0,dot(n,l));
         ambient = Ka * Ia;
         blinnPhong = Ks * I * pow(max(0, dot(n, h)), q);
 
         color = lambert_diffuse + ambient + blinnPhong;
 
-        
-        color = pow(color, vec3(1.0,1.0,1.0)/1.2);
-    }
-
-    /* UFO_Metal -- for more information, check ObjectModelMatrix.names_to_id */
+    } /* UFO_Metal -- for more information, check ObjectModelMatrix.names_to_id */
     else if(material_name_uniform == 2) {
         U = texcoords.x;
         V = texcoords.y;
 
-        Image_Kd = texture(TextureImage6, vec2(U,V)).rgb;
+        Image_Kd = texture(TextureImage8, vec2(U,V)).rgb;
         Image_Mettalic = texture(TextureImage7, vec2(U,V)).rgb;
 
-
         Ks = vec3(0.15, 0.15, 0.15);
-        Ka = vec3(0.5, 0.5, 0.5);
+        Ka = vec3(0.1, 0.1, 0.1);
 
         diffuse = Image_Kd * I * max(0,dot(n,l));
         ambient = Ka * Ia;
         specular = Ks * I * pow(max(0, dot(n, h)), 30.0);
     
         color = diffuse + ambient + specular;
-        color += Image_Mettalic *0.1;
-    }
-
-    /* asteroid -- for more information, check ObjectModelMatrix.names_to_id */
-    else if(material_name_uniform == 3)   
-    {
-        U = texcoords.x;
-        V = texcoords.y;
+        color += Image_Mettalic * 0.1;
         
-        // refletância ambiente
-        Ka = vec3(1.0, 1.0, 1.0);
-        // refletância especular
-        Ks = vec3(0.5, 0.5, 0.5);
-        // expoente expecular
-        float q = 20.0;
-        // refletância difusa
-        Image_Kd = texture(TextureImage9, vec2(U, V)).rgb;
-
-        diffuse = Image_Kd * I * max(0,dot(n,l));
-        ambient = Ka * Ia;
-        specular = Ks * I * pow(max(0, dot(n, h)), q);
-
-        color.rgb = diffuse + ambient + specular;
-    }
-
+    }  
     /* missile -- for more information, check ObjectModelMatrix.names_to_id */
     else if(material_name_uniform == 5){
         U = texcoords.x;
         V = texcoords.y;
         
-        // refletância ambiente
-        Ka = vec3(1.0,1.0,1.0);
-        // refletância especular
-        Ks = vec3(0.5, 0.5, 0.5);
-        // expoente expecular
-        float q = 20.0;
-        // refletância difusa
         Image_Kd = texture(TextureImage11, vec2(U, V)).rgb;
 
         diffuse = Image_Kd * I * (max(0,dot(n,l)) + 0.01);
+        color = diffuse;
+    } /* player -- for more information, check ObjectModelMatrix.names_to_id */
+    else if (material_name_uniform == 6 || material_name_uniform == 7 || 
+            material_name_uniform == 8 || material_name_uniform == 9 
+            ){
+        // ponto central da esfera
+        vec4 bbox_center = (bbox_min + bbox_max) / 2.0;
+        // raio da esfera
+        float ray = bbox_max.y - bbox_center.y;
+        // ponto p'
+        vec4 point_p = bbox_center + ray * normalize(position_model - bbox_center);
+        // vetor p
+        vec4 vec_p = point_p - bbox_center;
+        // ang. theta
+        float theta = atan(vec_p.x, vec_p.z);
+        // ang. phi
+        float phi = asin(vec_p.y/ ray);
+        // coor. textura U
+        U = (theta + M_PI)/(2*M_PI);
+        // coor. textura V
+        V = (phi + M_PI_2)/M_PI;
+
+        Ks = vec3(0.4, 0.4, 0.4);
+        Ka = vec3(0.1, 0.1, 0.1 );
+        float q = 45.0;
+
+        Image_Kd = texture(TextureImage14, vec2(U,V)).rgb;
+
+        lambert_diffuse = Image_Kd * I * max(0,dot(n,l)+0.01);
         ambient = Ka * Ia;
-        specular = Ks * I * pow(max(0, dot(n, h)), q);
+        blinnPhong = Ks * I * pow(max(0, dot(n, h)), q);
 
-        color.rgb = diffuse + ambient + specular;
-    }
-
-    /* player -- for more information, check ObjectModelMatrix.names_to_id */
-    else if (material_name_uniform == 6 || material_name_uniform == 7 || material_name_uniform == 8 || material_name_uniform == 9){
-        // float minx = bbox_min.x;
-        // float maxx = bbox_max.x;
-
-        // float miny = bbox_min.y;
-        // float maxy = bbox_max.y;
-
-        // float minz = bbox_min.z;
-        // float maxz = bbox_max.z;
-
-        // U = (position_model.x - minx)/(maxx - minx);
-        // V = (position_model.y - miny)/(maxy - miny);
-        U = texcoords.x;
-        V = texcoords.y;
-
-        // refletância ambiente
-        Ks = vec3(0.9,0.9,0.9);
-        // refletância especular
-        Ka = vec3(0.5, 0.5, 0.5);
-        // expoente expecular
-        float q = 20.0;
-        // refletância difusa
-        Image_Kd = texture(TextureImage12, vec2(U, V)).rgb;
-
-        diffuse = Image_Kd * I * (max(0,dot(n,l)) + 0.01);
-        ambient = Ka * Ia;
-        specular = Ks * I * pow(max(0, dot(n, h)), q);
-
-        color.rgb = diffuse + ambient + specular;    
-    }
-    /* cow -- for more information, check ObjectModelMatrix.names_to_id */
+        color = lambert_diffuse + ambient + blinnPhong;
+        
+        
+    } /* cow -- for more information, check ObjectModelMatrix.names_to_id */
     else if(
-        material_name_uniform == 10 
+        material_name_uniform == 10
         || material_name_uniform == 11
         || material_name_uniform == 12
         || material_name_uniform == 13
-        || material_name_uniform == 14
         ){
             U = texcoords.x;
             V = texcoords.y;
-
-            // refletância difusa apenas
+            
             Image_Kd = texture(TextureImage10, vec2(U, V)).rgb;
 
             diffuse = Image_Kd * I * (max(0,dot(n,l)) + 0.01);
 
-            color.rgb = diffuse;
+            color = diffuse;
+    } else if(material_name_uniform == 14) { // asteroid
+        U = texcoords.x;
+        V = texcoords.y;
+
+        Image_Kd = texture(TextureImage9, vec2(U, V)).rgb;
+        Image_Mettalic = texture(TextureImage13, vec2(U, V)).rgb;
+
+        diffuse = Image_Kd * I * (max(0,dot(n,l)) + 0.01);
+        
+        color.rgb = diffuse;
+
+        diffuse = Image_Mettalic * I * (max(0,dot(n,l)) + 0.01);
+
+        color.rgb += Image_Mettalic;
+        
     }
-    else{
-        color.rgb = vec3(1.0, 1.0, 1.0);
+    else {
+        // ponto central da esfera
+        vec4 bbox_center = (bbox_min + bbox_max) / 2.0;
+        // raio da esfera
+        float ray = bbox_max.y - bbox_center.y;
+        // ponto p'
+        vec4 point_p = bbox_center + ray * normalize(position_model - bbox_center);
+        // vetor p
+        vec4 vec_p = point_p - bbox_center;
+        // ang. theta
+        float theta = atan(vec_p.x, vec_p.z);
+        // ang. phi
+        float phi = asin(vec_p.y/ ray);
+        // coor. textura U
+        U = (theta + M_PI)/(2*M_PI);
+        // coor. textura V
+        V = (phi + M_PI_2)/M_PI;
+
+
+        Ks = vec3(0.4, 0.4, 0.4);
+        Ka = vec3(0.1, 0.1, 0.1 );
+        float q = 45.0;
+
+        Image_Kd = texture(TextureImage14, vec2(U,V)).rgb;
+
+
+        lambert_diffuse = Image_Kd * I * max(0,dot(n,l)+0.01);
+        ambient = Ka * Ia;
+        blinnPhong = Ks * I * pow(max(0, dot(n, h)), q);
+
+        color = lambert_diffuse + ambient + blinnPhong;
     }
 }
 

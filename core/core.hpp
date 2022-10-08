@@ -73,18 +73,21 @@ std::stack<glm::mat4>  g_MatrixStack;
 
 // Vetor que armazena os caminhos das imagens de textura.
 std::vector<std::string> texture_images= {
-    "../../data/ufo/Textures/UFO_Metal_BaseColor.png",
-    "../../data/ufo/Textures/UFO_Metal_Metallic.png",
-    "../../data/ufo/Textures/UFO_Glass_BaseColor.png",
+    "../../data/ufo/Textures/UFO_Metal_BaseColor.png", //6
+    "../../data/ufo/Textures/UFO_Metal_Metallic.png", //7
+    "../../data/ufo/Textures/UFO_Glass_BaseColor.png", //8
 
     // asteroid textures:
-    "../../data/asteroid/textures/Albedo.jpg",
+    "../../data/asteroid/textures/Displacement.jpg", //9
     // cow texrures:
-    "../../data/cow/textures/cow_texture.png",
+    "../../data/cow/textures/cow_texture.png", //10
     // missile textures:
-    "../../data/missile/textures/MLRS_Rocket_MLRS_Rocket_Mat_BaseColor.png",
+    "../../data/missile/textures/MLRS_Rocket_MLRS_Rocket_Mat_BaseColor.png", //11
     // player textures
-    "../../data/player/textures/metallic.png",
+    "../../data/player/textures/Metal_006_metallic.jpg", //12
+    "../../data/asteroid/textures/Metalness.jpg", //13
+    "../../data/player/textures/metallic2.jpg", //14
+    "../../data/player/textures/Metal_006_ambientOcclusion.jpg"//15
 
 };
 

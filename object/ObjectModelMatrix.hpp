@@ -23,7 +23,7 @@ map<string, int> names_to_id = {{"UFO_Glass", 1}, {"UFO_Metal", 2}, {"asteroid",
     // PLAYER
     {"HullColor", 6},{"CockpitGlass",7}, {"HullPlain", 8}, {"Engine", 9},
     // COW
-    {"cow", 10},{"Cube",11}, {"Material_cowEye.png", 12}, {"usemtl Material_1_cowDiff00_test.png", 13}, {"Material_1", 14}
+    {"cow", 10},{"Cube",11}, {"Material_cowEye.png", 12}, {"Material_1_cowDiff00_test.png", 13}, {"Material_1", 14}
     };
 
 // Estrutura responsável por controlar a posição dos objetos.
@@ -172,6 +172,7 @@ class ComplexObjectModelMatrix : public ObjectModelMatrix
                 glm::mat4 model = this->get_model();
                 glUniformMatrix4fv(model_uniform, 1, GL_FALSE, glm::value_ptr(model));
                 glUniform1i(material_name_uniform, names_to_id[this->objs_components[i].c_str()]);
+                std::cout << this->objs_components[i].c_str() << " " << names_to_id[this->objs_components[i].c_str()]    << "\n";
                 // Tem que passar não para o nome do objeto, mas sim para o nome do "sub-objeto" que compõe o objeto
                 glUniform1i(object_id_uniform,this->get_id());
                 DrawVirtualObject(this->objs_components[i].c_str());
